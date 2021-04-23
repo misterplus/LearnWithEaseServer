@@ -9,10 +9,8 @@ import team.one.lwes.enums.Background;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserInfo {
-    private int age;
+    private int age, grade;
     private Background bak;
-    private int grade;
-    private boolean status;
-    //TODO: city, probably a long
-    //TODO: school, probably a long too
+    private boolean status; //true = graduated
+    private String province, city, area, school; // ids
 }

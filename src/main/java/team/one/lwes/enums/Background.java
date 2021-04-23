@@ -1,6 +1,7 @@
 package team.one.lwes.enums;
 
 public enum Background {
+    //use 0-7 as values when posting
     ELEMENTARY_SCHOOL, //小学
     MID_SCHOOL, //初中
     HIGH_SCHOOL, //高中
