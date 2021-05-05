@@ -11,6 +11,5 @@ import team.one.lwes.enums.Background;
 public class UserInfo {
     private int age, grade;
     private Background bak;
-    private boolean status; //true = graduated
-    private String province, city, area, school; // ids
+    private String province, city, area, school;
 }
