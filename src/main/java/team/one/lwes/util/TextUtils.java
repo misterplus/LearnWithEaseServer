@@ -15,6 +15,10 @@ public class TextUtils {
         return text.matches("[-+=_,.a-zA-Z0-9]+");
     }
 
+    public static boolean isLegalAge(int num){
+        return num > 0 && num < 120;
+    }
+
     public static int getPasswordComplexity(@NotNull String text) {
         int comp = 0;
         if (text.matches(".*[-+=_,.].*")) comp++;

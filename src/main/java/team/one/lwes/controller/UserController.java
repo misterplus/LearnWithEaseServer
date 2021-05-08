@@ -11,15 +11,25 @@ import team.one.lwes.util.UserUtils;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Response register(@RequestBody @NonNull User user) {
         String username = user.getUsername();
         String password = user.getPassword();
+        int age = user.getEx().getAge();
+        int grade = user.getEx().getGrade();
+        int bak = user.getEx().getBak();
+        String province = user.getEx().getProvince();
+        String city = user.getEx().getCity();
+        String area = user.getEx().getArea();
+        String school = user.getEx().getSchool();
         if (!UserUtils.isUsernameValid(username))
             return Response.invalidParamResp("username");
         else if (!UserUtils.isPasswordValid(password))
             return Response.invalidParamResp("password");
+        else if (!UserUtils.isAgeValid(age))
+            return Response.invalidParamResp("EX_Age");
+        else if (!UserUtils.isPlacedValid(province,city,area))
+            return Response.invalidParamResp("EX_Place");
         user.setUsername(UserUtils.getAccid(username));
         user.setPassword(UserUtils.getToken(username, password));
         return APIUtils.register(user); // credentials or error msg
