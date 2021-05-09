@@ -41,7 +41,7 @@ public class UserUtils {
         return TextUtils.isLegalPassword(password) && TextUtils.getPasswordComplexity(password) > 1 && password.length() >= 6 && password.length() <= 16;
     }
 
-    public static boolean isEducationValid(int grade, int bak){
+    public static boolean isEducationValid(int bak, int grade){
         if (grade < 0)
             return false;
         switch (bak) {
@@ -90,7 +90,7 @@ public class UserUtils {
         return null;
     }
 
-    public static boolean isSchoolValid(String school) {
-        return TextUtils.isEmpty(school) || SCHOOL_LIST.contains(school);
+    public static boolean isSchoolValid(int bak, String school) {
+        return bak > 3 ? SCHOOL_LIST.contains(school) : TextUtils.isEmpty(school);
     }
 }

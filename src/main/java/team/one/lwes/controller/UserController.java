@@ -33,9 +33,9 @@ public class UserController {
             return Response.invalidParamResp("age");
         else if (!UserUtils.isCityValid(province, city, area))
             return Response.invalidParamResp("city");
-        else if (!UserUtils.isEducationValid(grade, bak))
+        else if (!UserUtils.isEducationValid(bak, grade))
             return Response.invalidParamResp("education");
-        else if (!UserUtils.isSchoolValid(school))
+        else if (!UserUtils.isSchoolValid(bak, school))
             return Response.invalidParamResp("school");
         user.setUsername(UserUtils.getAccid(username));
         user.setPassword(UserUtils.getToken(username, password));
