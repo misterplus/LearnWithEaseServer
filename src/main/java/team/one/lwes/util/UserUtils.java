@@ -4,23 +4,26 @@ import cn.hutool.core.io.file.FileReader;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import team.one.lwes.bean.Area;
-import team.one.lwes.bean.City;
-import team.one.lwes.bean.Province;
-import team.one.lwes.bean.UserInfo;
 import org.jetbrains.annotations.NotNull;
-
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserUtils {
-    private static Logger logger = LoggerFactory.getLogger(UserUtils.class);
+
+    private static final JSONArray CITY_LIST = getCityList();
+    private static final List<String> SCHOOL_LIST = getSchoolList();
+
+    private static List<String> getSchoolList() {
+        try {
+            ClassPathResource resource = new ClassPathResource("school_data.txt");
+            return new FileReader(resource.getFile()).readLines();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static String getAccid(@NotNull String username) {
         return username.toLowerCase();
@@ -38,43 +41,36 @@ public class UserUtils {
         return TextUtils.isLegalPassword(password) && TextUtils.getPasswordComplexity(password) > 1 && password.length() >= 6 && password.length() <= 16;
     }
 
-    public static boolean isAgeValid(int age) {
-        return TextUtils.isLegalAge(age);
-    }
-
-    public static boolean isPlacedValid(String province,String city,String area) {
-        int num = 0;
-        FileReader fileReader = new FileReader("classpath:china_city_data.json");
-        String s = fileReader.readString();
-        List<Province> provinces = JSONUtil.toList(s,Province.class);
-        logger.info("this is "+ provinces);
-        for (Province value : provinces) {
-            logger.info("this is "+ value);
-            List<City> cities = JSONUtil.toList(value.getCityList().toString(), City.class);
-            if (value.getName().equals(province)){
-                num++;
-            }
-            for (City item : cities) {
-                List<Area> areas = JSONUtil.toList(item.getCityList().toString(), Area.class);
-                if (item.getName().equals(city)){
-                    num++;
-                }
-                for (Area element : areas) {
-                    if (element.getName().equals(area)) {
-                        num++;
+    public static boolean isCityValid(String province, String city, String area) {
+        for (JSONObject p : CITY_LIST.jsonIter()) {
+            if (p.get("name").equals(province)) {
+                JSONArray cities = p.getJSONArray("cityList");
+                for (JSONObject c : cities.jsonIter()) {
+                    if (c.get("name").equals(city)) {
+                        JSONArray areas = c.getJSONArray("cityList");
+                        for (JSONObject a : areas.jsonIter()) {
+                            if (a.get("name").equals(area)) {
+                                return true;
+                            }
+                        }
                     }
                 }
             }
         }
-        if (num==3 && !province.equals("") && !city.equals("") && !area.equals("")){
-            logger.info("this is "+ provinces);
-            return true;
-        } else {
-            return false;
-        }
-
-//        JSONArray jsonArray = new JSONArray(s);
-//        JSONObject jsonObject = jsonArray.toJSONObject(jsonArray);
+        return false;
     }
 
+    private static JSONArray getCityList() {
+        try {
+            ClassPathResource resource = new ClassPathResource("china_city_data.json");
+            return new JSONArray(new FileReader(resource.getFile()).readString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean isSchoolValid(String school) {
+        return SCHOOL_LIST.contains(school);
+    }
 }

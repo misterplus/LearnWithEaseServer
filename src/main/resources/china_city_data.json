@@ -1,4 +1,5 @@
-[ {
+[
+  {
     "id": "110000",
     "name": "北京市",
     "cityList": [
@@ -15743,15 +15744,12 @@
             "name": "旗山地区"
           }
         ],
-
         "id": "710600",
         "name": "高雄市"
-
       }
     ],
     "id": "710000",
     "name": "台湾省"
-
   },
   {
     "cityList": [
@@ -15879,7 +15877,8 @@
             "pinYin": "Miyun",
             "status": 0,
             "stubGroupCnt": null
-          },{
+          },
+          {
             "createAccount": null,
             "createTime": null,
             "gisBd09Lat": 0.0,

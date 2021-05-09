@@ -2,8 +2,8 @@ package team.one.lwes.controller;
 
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
-import team.one.lwes.bean.Response;
 import team.one.lwes.bean.LoginInfo;
+import team.one.lwes.bean.Response;
 import team.one.lwes.bean.User;
 import team.one.lwes.util.APIUtils;
 import team.one.lwes.util.UserUtils;
@@ -26,10 +26,12 @@ public class UserController {
             return Response.invalidParamResp("username");
         else if (!UserUtils.isPasswordValid(password))
             return Response.invalidParamResp("password");
-        else if (!UserUtils.isAgeValid(age))
-            return Response.invalidParamResp("EX_Age");
-        else if (!UserUtils.isPlacedValid(province,city,area))
-            return Response.invalidParamResp("EX_Place");
+        else if (age < 1 || age > 120)
+            return Response.invalidParamResp("age");
+        else if (!UserUtils.isCityValid(province, city, area))
+            return Response.invalidParamResp("city");
+        else if (!UserUtils.isSchoolValid(school))
+            return Response.invalidParamResp("school");
         user.setUsername(UserUtils.getAccid(username));
         user.setPassword(UserUtils.getToken(username, password));
         return APIUtils.register(user); // credentials or error msg
