@@ -41,6 +41,24 @@ public class UserUtils {
         return TextUtils.isLegalPassword(password) && TextUtils.getPasswordComplexity(password) > 1 && password.length() >= 6 && password.length() <= 16;
     }
 
+    public static boolean isEducationValid(int grade,int bak){
+        if (grade == 0 && bak>=0 && bak <=7){
+            return true;
+        }else if (grade == 1 && bak>=0 && bak <=4){
+            return true;
+        }else if (grade == 2 && bak>=0 && bak <=4){
+            return true;
+        }else if (grade == 3 && bak>=0 && bak <=4){
+            return true;
+        }else if (grade == 4 && bak>=0 && bak <=4){
+            return true;
+        }else if (grade == 5 && bak>=0 && bak <=5){
+            return true;
+        }else if (grade == 6 && bak>=0 && bak <=4){
+            return true;
+        }else return grade == 7 && bak >= 0 && bak <= 5;
+    }
+
     public static boolean isCityValid(String province, String city, String area) {
         for (JSONObject p : CITY_LIST.jsonIter()) {
             if (p.get("name").equals(province)) {

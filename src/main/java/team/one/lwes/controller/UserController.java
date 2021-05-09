@@ -15,6 +15,7 @@ public class UserController {
     public Response register(@RequestBody @NonNull User user) {
         String username = user.getUsername();
         String password = user.getPassword();
+        String name = user.getName();
         int age = user.getEx().getAge();
         int grade = user.getEx().getGrade();
         int bak = user.getEx().getBak();
@@ -26,10 +27,14 @@ public class UserController {
             return Response.invalidParamResp("username");
         else if (!UserUtils.isPasswordValid(password))
             return Response.invalidParamResp("password");
+        else if (name.isEmpty() || name.length() > 16)
+            return Response.invalidParamResp("name");
         else if (age < 1 || age > 120)
             return Response.invalidParamResp("age");
         else if (!UserUtils.isCityValid(province, city, area))
             return Response.invalidParamResp("city");
+        else if (!UserUtils.isEducationValid(grade, bak))
+            return Response.invalidParamResp("education");
         else if (!UserUtils.isSchoolValid(school))
             return Response.invalidParamResp("school");
         user.setUsername(UserUtils.getAccid(username));
