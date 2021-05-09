@@ -91,6 +91,6 @@ public class UserUtils {
     }
 
     public static boolean isSchoolValid(String school) {
-        return SCHOOL_LIST.contains(school);
+        return TextUtils.isEmpty(school) || SCHOOL_LIST.contains(school);
     }
 }
