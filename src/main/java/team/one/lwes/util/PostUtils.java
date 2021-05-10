@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Properties;
 
+import static java.lang.System.exit;
+
 public class PostUtils {
 
     private static final String APP_KEY = "57b4c463e5a9cca9ca364a8d0d8c9f39";
@@ -19,7 +21,10 @@ public class PostUtils {
         Properties prop = new Properties();
         try {
             prop.load(new FileReader(System.getProperty("user.home") + "\\.gradle\\gradle.properties").getInputStream());
-            return prop.getProperty("lwes.secret");
+            String secret = prop.getProperty("lwes.secret");
+            if (secret == null || secret.length() == 0)
+                exit(0);
+            return secret;
         } catch (IOException e) {
             e.printStackTrace();
         }
