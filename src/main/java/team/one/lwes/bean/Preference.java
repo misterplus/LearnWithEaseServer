@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo {
-    private int age, grade, bak;
-    private String province, city, area, school;
-    private Preference pref;
+public class Preference {
+    private int timeStudy, timeRest, contentStudy;
+    private boolean sameCity, sameSchool, sameGender, newRoomFirst;
 }

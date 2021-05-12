@@ -2,9 +2,7 @@ package team.one.lwes.controller;
 
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
-import team.one.lwes.bean.LoginInfo;
-import team.one.lwes.bean.Response;
-import team.one.lwes.bean.User;
+import team.one.lwes.bean.*;
 import team.one.lwes.util.APIUtils;
 import team.one.lwes.util.UserUtils;
 
@@ -16,13 +14,18 @@ public class UserController {
         String username = user.getUsername();
         String password = user.getPassword();
         String name = user.getName();
-        int age = user.getEx().getAge();
-        int grade = user.getEx().getGrade();
-        int bak = user.getEx().getBak();
-        String province = user.getEx().getProvince();
-        String city = user.getEx().getCity();
-        String area = user.getEx().getArea();
-        String school = user.getEx().getSchool();
+        UserInfo ex = user.getEx();
+        int age = ex.getAge();
+        int grade = ex.getGrade();
+        int bak = ex.getBak();
+        String province = ex.getProvince();
+        String city = ex.getCity();
+        String area = ex.getArea();
+        String school = ex.getSchool();
+        Preference pref = ex.getPref();
+        int timeStudy = pref.getTimeStudy();
+        int timeRest = pref.getTimeRest();
+        int contentStudy = pref.getContentStudy();
         if (!UserUtils.isUsernameValid(username))
             return Response.invalidParamResp("username");
         else if (!UserUtils.isPasswordValid(password))
@@ -37,6 +40,12 @@ public class UserController {
             return Response.invalidParamResp("education");
         else if (!UserUtils.isSchoolValid(bak, school))
             return Response.invalidParamResp("school");
+        else if (!UserUtils.isTimeStudyValid(timeStudy))
+            return Response.invalidParamResp("timeStudy");
+        else if (!UserUtils.isTimeRestValid(timeRest))
+            return Response.invalidParamResp("timeRest");
+        else if (!UserUtils.isContentStudyValid(contentStudy))
+            return Response.invalidParamResp("contentStudy");
         user.setUsername(UserUtils.getAccid(username));
         user.setPassword(UserUtils.getToken(username, password));
         return APIUtils.register(user); // credentials or error msg

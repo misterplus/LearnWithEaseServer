@@ -93,4 +93,16 @@ public class UserUtils {
     public static boolean isSchoolValid(int bak, String school) {
         return bak > 3 ? SCHOOL_LIST.contains(school) : TextUtils.isEmpty(school);
     }
+
+    public static boolean isTimeStudyValid(int timeStudy) {
+        return timeStudy >= 0 && timeStudy < 7;
+    }
+
+    public static boolean isTimeRestValid(int timeRest) {
+        return timeRest >= 0 && timeRest < 5;
+    }
+
+    public static boolean isContentStudyValid(int contentStudy) {
+        return contentStudy >= 0 && contentStudy < 13;
+    }
 }
