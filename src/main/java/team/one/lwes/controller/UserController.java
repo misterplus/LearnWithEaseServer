@@ -63,4 +63,15 @@ public class UserController {
         return new Response(200, new LoginInfo(accid, token));
     }
 
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Response update(@RequestParam @NonNull String username, @RequestParam @NonNull String password) {
+        if (!UserUtils.isUsernameValid(username))
+            return Response.invalidParamResp("username");
+        else if (!UserUtils.isPasswordValid(password))
+            return Response.invalidParamResp("password");
+        String accid = UserUtils.getAccid(username);
+        String token = UserUtils.getToken(username, password);
+        return new Response(200, new LoginInfo(accid, token));
+    }
+
 }
