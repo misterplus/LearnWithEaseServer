@@ -71,7 +71,7 @@ public class UserController {
             return Response.invalidParamResp("password");
         String accid = UserUtils.getAccid(username);
         String token = UserUtils.getToken(username, password);
-        return APIUtils.update(accid,token);
+        return APIUtils.update(accid, token);
     }
 
 }

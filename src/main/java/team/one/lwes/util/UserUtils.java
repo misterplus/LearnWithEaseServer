@@ -41,7 +41,7 @@ public class UserUtils {
         return TextUtils.isLegalPassword(password) && TextUtils.getPasswordComplexity(password) > 1 && password.length() >= 6 && password.length() <= 16;
     }
 
-    public static boolean isEducationValid(int bak, int grade){
+    public static boolean isEducationValid(int bak, int grade) {
         if (grade < 0)
             return false;
         switch (bak) {

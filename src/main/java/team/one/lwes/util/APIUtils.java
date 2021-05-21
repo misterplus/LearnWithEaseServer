@@ -22,7 +22,7 @@ public class APIUtils {
         return JSONUtil.toBean(resp.body(), Response.class);
     }
 
-    public static Response update(@NotNull String accid,@NotNull String token) {
+    public static Response update(@NotNull String accid, @NotNull String token) {
         HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/user/update.action")
                 .form(
                         "accid", accid,
