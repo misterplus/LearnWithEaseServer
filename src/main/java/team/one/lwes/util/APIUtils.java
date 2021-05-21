@@ -36,8 +36,10 @@ public class APIUtils {
                 .timeout(5000)
                 .execute();
         Response rsp = JSONUtil.toBean(resp.body(), Response.class);
-        if (rsp.getCode() == 200)
+        if (rsp.getCode() == 200) {
             rsp.setInfo(new LoginInfo(null, token));
+            LoginInfoDaoImpl.getInstance().updateToken(accid, token);
+        }
         return rsp;
     }
 }

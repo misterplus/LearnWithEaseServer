@@ -30,8 +30,13 @@ public class LoginInfoDaoImpl implements LoginInfoDao {
     }
 
     @Override
-    public boolean saveLoginInfo(String accid, String token) {
-        int affected = db.update("insert into login_info values(?,?)", accid, token);
-        return affected != 0;
+    public void saveLoginInfo(String accid, String token) {
+        db.update("insert into login_info values(?,?)", accid, token);
     }
+
+    @Override
+    public void updateToken(String accid, String token) {
+        db.update("update login_info set token = ? where accid = ?", token, accid);
+    }
+
 }
