@@ -1,14 +1,18 @@
 package team.one.lwes.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import team.one.lwes.bean.*;
+import team.one.lwes.dao.impl.LoginInfoDaoImpl;
 import team.one.lwes.util.APIUtils;
 import team.one.lwes.util.UserUtils;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Response register(@RequestBody @NonNull User user) {
         String username = user.getUsername();
@@ -64,14 +68,23 @@ public class UserController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Response update(@RequestParam @NonNull String username, @RequestParam @NonNull String password) {
+    public Response update(@RequestParam @NonNull String username, @RequestParam @NonNull String oldPassword, @RequestParam @NonNull String newPassword) {
         if (!UserUtils.isUsernameValid(username))
             return Response.invalidParamResp("username");
-        else if (!UserUtils.isPasswordValid(password))
-            return Response.invalidParamResp("password");
+        else if (!UserUtils.isPasswordValid(oldPassword))
+            return Response.invalidParamResp("oldPassword");
+        else if (!UserUtils.isPasswordValid(newPassword))
+            return Response.invalidParamResp("newPassword");
         String accid = UserUtils.getAccid(username);
-        String token = UserUtils.getToken(username, password);
-        return APIUtils.update(accid, token);
+        String oldToken = UserUtils.getToken(username, oldPassword);
+        //TODO: check if oldToken is correct
+        String savedToken = LoginInfoDaoImpl.getInstance().getToken(accid);
+        if (savedToken == null)
+            return new Response(302, "user does not exist");
+        if (!oldToken.equals(savedToken))
+            return new Response(302, "old password incorrect");
+        String newToken = UserUtils.getToken(username, newPassword);
+        return APIUtils.update(accid, newToken);
     }
 
 }

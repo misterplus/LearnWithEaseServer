@@ -3,8 +3,10 @@ package team.one.lwes.util;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import org.jetbrains.annotations.NotNull;
+import team.one.lwes.bean.LoginInfo;
 import team.one.lwes.bean.Response;
 import team.one.lwes.bean.User;
+import team.one.lwes.dao.impl.LoginInfoDaoImpl;
 
 public class APIUtils {
 
@@ -19,7 +21,10 @@ public class APIUtils {
                 )
                 .timeout(5000)
                 .execute();
-        return JSONUtil.toBean(resp.body(), Response.class);
+        Response rsp = JSONUtil.toBean(resp.body(), Response.class);
+        if (rsp.getCode() == 200)
+            LoginInfoDaoImpl.getInstance().saveLoginInfo(user.getUsername(), user.getPassword());
+        return rsp;
     }
 
     public static Response update(@NotNull String accid, @NotNull String token) {
@@ -30,6 +35,9 @@ public class APIUtils {
                 )
                 .timeout(5000)
                 .execute();
-        return JSONUtil.toBean(resp.body(), Response.class);
+        Response rsp = JSONUtil.toBean(resp.body(), Response.class);
+        if (rsp.getCode() == 200)
+            rsp.setInfo(new LoginInfo(null, token));
+        return rsp;
     }
 }
