@@ -77,7 +77,6 @@ public class UserController {
             return Response.invalidParamResp("newPassword");
         String accid = UserUtils.getAccid(username);
         String oldToken = UserUtils.getToken(username, oldPassword);
-        //TODO: check if oldToken is correct
         String savedToken = LoginInfoDaoImpl.getInstance().getToken(accid);
         if (savedToken == null)
             return new Response(302, "user does not exist");
