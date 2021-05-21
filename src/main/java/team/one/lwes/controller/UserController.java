@@ -1,7 +1,6 @@
 package team.one.lwes.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import team.one.lwes.bean.*;
@@ -12,6 +11,9 @@ import team.one.lwes.util.UserUtils;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    @Autowired
+    private LoginInfoDaoImpl loginDao;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Response register(@RequestBody @NonNull User user) {
@@ -52,7 +54,10 @@ public class UserController {
             return Response.invalidParamResp("contentStudy");
         user.setUsername(UserUtils.getAccid(username));
         user.setPassword(UserUtils.getToken(username, password));
-        return APIUtils.register(user); // credentials or error msg
+        Response rsp = APIUtils.register(user);
+        if (rsp.getCode() == 200)
+            loginDao.saveLoginInfo(user.getUsername(), user.getPassword());
+        return rsp; // credentials or error msg
     }
 
     // May produce invalid credentials, login will NOT always pass
@@ -77,13 +82,17 @@ public class UserController {
             return Response.invalidParamResp("newPassword");
         String accid = UserUtils.getAccid(username);
         String oldToken = UserUtils.getToken(username, oldPassword);
-        String savedToken = LoginInfoDaoImpl.getInstance().getToken(accid);
+        String savedToken = loginDao.getToken(accid);
         if (savedToken == null)
             return new Response(302, "user does not exist");
         if (!oldToken.equals(savedToken))
             return new Response(302, "old password incorrect");
         String newToken = UserUtils.getToken(username, newPassword);
-        return APIUtils.update(accid, newToken);
+        Response rsp = APIUtils.update(accid, newToken);
+        if (rsp.getCode() == 200) {
+            rsp.setInfo(new LoginInfo(null, newToken));
+            loginDao.updateToken(accid, newToken);
+        }
+        return rsp;
     }
-
 }

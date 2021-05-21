@@ -3,20 +3,14 @@ package team.one.lwes.dao.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import team.one.lwes.bean.LoginInfo;
 import team.one.lwes.dao.LoginInfoDao;
 
 import java.util.List;
 
-@Repository
+@Component
 public class LoginInfoDaoImpl implements LoginInfoDao {
-
-    private static final LoginInfoDaoImpl instance = new LoginInfoDaoImpl();
-
-    public static LoginInfoDaoImpl getInstance() {
-        return instance;
-    }
 
     @Autowired
     private JdbcTemplate db;
