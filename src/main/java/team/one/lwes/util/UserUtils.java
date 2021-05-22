@@ -6,6 +6,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
+import team.one.lwes.dao.impl.LoginInfoDaoImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +15,12 @@ public class UserUtils {
 
     private static final JSONArray CITY_LIST = getCityList();
     private static final List<String> SCHOOL_LIST = getSchoolList();
+
+    public static boolean auth(LoginInfoDaoImpl loginDao, String accid, String password) {
+        String token = UserUtils.getToken(accid, password);
+        String savedToken = loginDao.getToken(accid);
+        return token.equals(savedToken);
+    }
 
     private static List<String> getSchoolList() {
         try {
@@ -29,8 +36,8 @@ public class UserUtils {
         return username.toLowerCase();
     }
 
-    public static String getToken(@NotNull String username, @NotNull String password) {
-        return SecureUtil.md5(username + password);
+    public static String getToken(@NotNull String accid, @NotNull String password) {
+        return SecureUtil.md5(accid + password);
     }
 
     public static boolean isUsernameValid(@NotNull String username) {

@@ -53,7 +53,7 @@ public class UserController {
         else if (!UserUtils.isContentStudyValid(contentStudy))
             return Response.invalidParamResp("contentStudy");
         user.setUsername(UserUtils.getAccid(username));
-        user.setPassword(UserUtils.getToken(username, password));
+        user.setPassword(UserUtils.getToken(user.getUsername(), password));
         Response rsp = APIUtils.register(user);
         if (rsp.getCode() == 200)
             loginDao.saveLoginInfo(user.getUsername(), user.getPassword());
@@ -68,7 +68,7 @@ public class UserController {
         else if (!UserUtils.isPasswordValid(password))
             return Response.invalidParamResp("password");
         String accid = UserUtils.getAccid(username);
-        String token = UserUtils.getToken(username, password);
+        String token = UserUtils.getToken(accid, password);
         return new Response(200, new LoginInfo(accid, token));
     }
 
@@ -81,13 +81,10 @@ public class UserController {
         else if (!UserUtils.isPasswordValid(newPassword))
             return Response.invalidParamResp("newPassword");
         String accid = UserUtils.getAccid(username);
-        String oldToken = UserUtils.getToken(username, oldPassword);
-        String savedToken = loginDao.getToken(accid);
-        if (savedToken == null)
-            return new Response(302, "user does not exist");
-        if (!oldToken.equals(savedToken))
-            return new Response(302, "old password incorrect");
-        String newToken = UserUtils.getToken(username, newPassword);
+        boolean authPassed = UserUtils.auth(loginDao, accid, oldPassword);
+        if (!authPassed)
+            return new Response(302, "username or password incorrect");
+        String newToken = UserUtils.getToken(accid, newPassword);
         Response rsp = APIUtils.update(accid, newToken);
         if (rsp.getCode() == 200) {
             rsp.setInfo(new LoginInfo(null, newToken));

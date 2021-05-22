@@ -3,10 +3,8 @@ package team.one.lwes.util;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import team.one.lwes.bean.Response;
 import team.one.lwes.bean.User;
-import team.one.lwes.dao.impl.LoginInfoDaoImpl;
 
 public class APIUtils {
 
@@ -29,6 +27,19 @@ public class APIUtils {
                 .form(
                         "accid", accid,
                         "token", token
+                )
+                .timeout(5000)
+                .execute();
+        return JSONUtil.toBean(resp.body(), Response.class);
+    }
+
+    public static Response getRoomToken(long uid, @NotNull String channelName) {
+        HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/user/getToken.action")
+                .form(
+                        "uid", uid,
+                        "channelName", channelName,
+                        "repeatUse", false,
+                        "expireAt", 30
                 )
                 .timeout(5000)
                 .execute();
