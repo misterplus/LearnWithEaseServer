@@ -11,7 +11,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +26,6 @@ public class UserUtils {
         return token.equals(savedToken);
     }
 
-    //TODO: load via buffer
     private static List<String> getSchoolList() {
         try {
             ClassPathResource resource = new ClassPathResource("school_data.txt");
@@ -95,7 +93,6 @@ public class UserUtils {
         return false;
     }
 
-    //TODO: load via buffer
     private static JSONArray getCityList() {
         try {
             ClassPathResource resource = new ClassPathResource("china_city_data.json");
