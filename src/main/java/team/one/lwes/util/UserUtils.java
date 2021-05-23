@@ -1,6 +1,5 @@
 package team.one.lwes.util;
 
-import cn.hutool.core.io.file.FileReader;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -9,6 +8,9 @@ import org.springframework.core.io.ClassPathResource;
 import team.one.lwes.dao.impl.LoginInfoDaoImpl;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 public class UserUtils {
@@ -25,7 +27,12 @@ public class UserUtils {
     private static List<String> getSchoolList() {
         try {
             ClassPathResource resource = new ClassPathResource("school_data.txt");
-            return new FileReader(resource.getFile()).readLines();
+            InputStream inputStream = resource.getInputStream();
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            String list = new String(bytes, StandardCharsets.UTF_8);
+            List<String> lines = Arrays.asList(list.split("\r\n"));
+            return lines;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,7 +97,11 @@ public class UserUtils {
     private static JSONArray getCityList() {
         try {
             ClassPathResource resource = new ClassPathResource("china_city_data.json");
-            return new JSONArray(new FileReader(resource.getFile()).readString());
+            InputStream inputStream = resource.getInputStream();
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            String str = new String(bytes, StandardCharsets.UTF_8);
+            return new JSONArray(str);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -37,4 +37,4 @@ jobs:
         key: ${{ secrets.ID_RSA }}
         port: ${{ secrets.PORT }}
         script: |
-          mkdir test
+          sh ~/server/start.sh

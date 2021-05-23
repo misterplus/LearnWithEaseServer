@@ -1,6 +1,7 @@
 package team.one.lwes.bean;
 
 import cn.hutool.json.JSONObject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,8 @@ public class Response {
         return new Response(414, paramName + " is invalid");
     }
 
+    //not this, this is only for server side check
+    @JsonIgnore
     public boolean isSuccess() {
         return code == 200;
     }
