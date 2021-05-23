@@ -20,11 +20,6 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Set SSH Environment
-      run: |
-        mkdir -p ~/.ssh/
-        echo "${{ secrets.ID_RSA }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
     - name: scp
       uses: garygrossgarten/github-action-scp@release
       with:
@@ -32,5 +27,5 @@ jobs:
         remote: scp/server/lwes-0.0.1-SNAPSHOT.jar
         host: ${{ secrets.IP }}
         username: ${{ secrets.USERNAME }}
-        privateKey: ~/.ssh/id_rsa
+        privateKey: ${{ secrets.ID_RSA }}
         port: ${{ secrets.PORT }}
