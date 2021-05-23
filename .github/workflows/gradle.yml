@@ -37,4 +37,4 @@ jobs:
         key: ${{ secrets.ID_RSA }}
         port: ${{ secrets.PORT }}
         script: |
-          sh ~/server/start.sh
+          nohup sh ~/server/start.sh &
