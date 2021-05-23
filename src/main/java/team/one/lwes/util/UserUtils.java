@@ -7,11 +7,14 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
 import team.one.lwes.dao.impl.LoginInfoDaoImpl;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserUtils {
 
@@ -29,11 +32,8 @@ public class UserUtils {
         try {
             ClassPathResource resource = new ClassPathResource("school_data.txt");
             InputStream inputStream = resource.getInputStream();
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            String list = new String(bytes, StandardCharsets.UTF_8);
-            List<String> lines = Arrays.asList(list.split("\r\n"));
-            return lines;
+            String result = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+            return Arrays.asList(result.split("\n"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,12 +100,8 @@ public class UserUtils {
         try {
             ClassPathResource resource = new ClassPathResource("china_city_data.json");
             InputStream inputStream = resource.getInputStream();
-            StringBuilder out = new StringBuilder();
-            byte[] buffer = new byte[256];
-            while(inputStream.read(buffer, 0, 256) != -1) {
-                out.append(new String(buffer));
-            }
-            return new JSONArray(out.toString());
+            String result = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+            return new JSONArray(result);
         } catch (IOException e) {
             e.printStackTrace();
         }
