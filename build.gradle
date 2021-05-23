@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.4.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'war'
 }
 
 group = 'team.one'
@@ -29,6 +30,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile 'cn.hutool:hutool-all:5.6.2'
+    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 test {
