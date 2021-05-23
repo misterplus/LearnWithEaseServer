@@ -33,4 +33,12 @@ public class LoginInfoDaoImpl implements LoginInfoDao {
         db.update("update login_info set token = ? where accid = ?", token, accid);
     }
 
+    @Override
+    public long getUid(String accid) {
+        List<LoginInfo> info = db.query("select uid from login_info where accid = ?", new BeanPropertyRowMapper(LoginInfo.class), accid);
+        if (info.size() > 0)
+            return info.get(0).getUid();
+        return -1;
+    }
+
 }

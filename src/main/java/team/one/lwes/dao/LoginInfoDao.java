@@ -6,4 +6,6 @@ public interface LoginInfoDao {
     void saveLoginInfo(String accid, String token);
 
     void updateToken(String accid, String token);
+
+    long getUid(String accid);
 }

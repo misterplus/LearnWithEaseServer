@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoginInfo {
     private String accid, token;
+    private Long uid;
 }

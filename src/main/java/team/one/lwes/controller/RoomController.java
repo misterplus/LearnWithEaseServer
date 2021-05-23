@@ -11,8 +11,6 @@ import team.one.lwes.dao.impl.LoginInfoDaoImpl;
 import team.one.lwes.util.APIUtils;
 import team.one.lwes.util.UserUtils;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/room")
 public class RoomController {
@@ -26,8 +24,12 @@ public class RoomController {
         boolean authPassed = UserUtils.auth(loginDao, accid, password);
         if (!authPassed)
             return new Response(302, "username or password incorrect");
-        UUID uuid = UUID.nameUUIDFromBytes(accid.getBytes());
-        long uid = uuid.getMostSignificantBits();
-        return APIUtils.getRoomToken(uid, channelName);
+        long uid = loginDao.getUid(accid);
+        //channelName is actually chatroom id cause we want to make things consistent
+        Response resp = APIUtils.getRoomToken(uid, channelName).toResponse();
+        //return uid here bc the client needs to join the room with it
+        if (resp.isSuccess())
+            resp.getInfo().set("uid", uid);
+        return resp;
     }
 }

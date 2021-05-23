@@ -1,5 +1,6 @@
 package team.one.lwes.bean;
 
+import cn.hutool.json.JSONObject;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response {
     private int code;
-    private Object info;
+    private JSONObject info;
     private String desc;
 
     public Response(int code, String desc) {
@@ -19,12 +20,16 @@ public class Response {
         this.desc = desc;
     }
 
-    public Response(int code, Object info) {
+    public Response(int code, JSONObject info) {
         this.code = code;
         this.info = info;
     }
 
     public static Response invalidParamResp(String paramName) {
         return new Response(414, paramName + " is invalid");
+    }
+
+    public boolean isSuccess() {
+        return code == 200;
     }
 }

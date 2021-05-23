@@ -1,5 +1,6 @@
 package team.one.lwes.controller;
 
+import cn.hutool.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
@@ -54,10 +55,10 @@ public class UserController {
             return Response.invalidParamResp("contentStudy");
         user.setUsername(UserUtils.getAccid(username));
         user.setPassword(UserUtils.getToken(user.getUsername(), password));
-        Response rsp = APIUtils.register(user);
-        if (rsp.getCode() == 200)
+        Response resp = APIUtils.register(user);
+        if (resp.isSuccess())
             loginDao.saveLoginInfo(user.getUsername(), user.getPassword());
-        return rsp; // credentials or error msg
+        return resp; // credentials or error msg
     }
 
     // May produce invalid credentials, login will NOT always pass
@@ -69,7 +70,7 @@ public class UserController {
             return Response.invalidParamResp("password");
         String accid = UserUtils.getAccid(username);
         String token = UserUtils.getToken(accid, password);
-        return new Response(200, new LoginInfo(accid, token));
+        return new Response(200, new JSONObject(new LoginInfo(accid, token, null)));
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -85,11 +86,11 @@ public class UserController {
         if (!authPassed)
             return new Response(302, "username or password incorrect");
         String newToken = UserUtils.getToken(accid, newPassword);
-        Response rsp = APIUtils.update(accid, newToken);
-        if (rsp.getCode() == 200) {
-            rsp.setInfo(new LoginInfo(null, newToken));
+        Response resp = APIUtils.update(accid, newToken);
+        if (resp.isSuccess()) {
+            resp.setInfo(new JSONObject(new LoginInfo(null, newToken, null)));
             loginDao.updateToken(accid, newToken);
         }
-        return rsp;
+        return resp;
     }
 }

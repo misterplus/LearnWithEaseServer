@@ -3,6 +3,7 @@ package team.one.lwes.util;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import org.jetbrains.annotations.NotNull;
+import team.one.lwes.bean.NERtcResponse;
 import team.one.lwes.bean.Response;
 import team.one.lwes.bean.User;
 
@@ -33,7 +34,7 @@ public class APIUtils {
         return JSONUtil.toBean(resp.body(), Response.class);
     }
 
-    public static Response getRoomToken(long uid, @NotNull String channelName) {
+    public static NERtcResponse getRoomToken(long uid, @NotNull String channelName) {
         HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/user/getToken.action")
                 .form(
                         "uid", uid,
@@ -43,6 +44,6 @@ public class APIUtils {
                 )
                 .timeout(5000)
                 .execute();
-        return JSONUtil.toBean(resp.body(), Response.class);
+        return JSONUtil.toBean(resp.body(), NERtcResponse.class);
     }
 }
