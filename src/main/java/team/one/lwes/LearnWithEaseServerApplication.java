@@ -1,7 +1,5 @@
 package team.one.lwes;
 
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -58,7 +56,6 @@ public class LearnWithEaseServerApplication {
     }
 
     private class GracefulShutdown implements TomcatConnectorCustomizer, ApplicationListener<ContextClosedEvent> {
-        private final Logger logger = LoggerFactory.getLogger(GracefulShutdown.class);
         private final int waitTime = 10;
         private volatile Connector connector;
 
@@ -75,9 +72,7 @@ public class LearnWithEaseServerApplication {
                 if (executor instanceof ThreadPoolExecutor) {
                     ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
                     threadPoolExecutor.shutdown();
-                    if (!threadPoolExecutor.awaitTermination(waitTime, TimeUnit.SECONDS)) {
-                        logger.warn("Tomcat 进程在" + waitTime + " 秒内无法结束，尝试强制结束");
-                    }
+                    threadPoolExecutor.awaitTermination(waitTime, TimeUnit.SECONDS);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
