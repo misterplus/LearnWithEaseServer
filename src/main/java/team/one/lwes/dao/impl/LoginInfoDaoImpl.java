@@ -25,7 +25,7 @@ public class LoginInfoDaoImpl implements LoginInfoDao {
 
     @Override
     public void saveLoginInfo(String accid, String token) {
-        db.update("insert into login_info values(?,?)", accid, token);
+        db.update("insert into login_info(accid, token) values(?,?)", accid, token);
     }
 
     @Override
