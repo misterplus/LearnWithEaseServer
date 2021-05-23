@@ -24,6 +24,7 @@ public class UserUtils {
         return token.equals(savedToken);
     }
 
+    //TODO: load via buffer
     private static List<String> getSchoolList() {
         try {
             ClassPathResource resource = new ClassPathResource("school_data.txt");
@@ -94,14 +95,17 @@ public class UserUtils {
         return false;
     }
 
+    //TODO: load via buffer
     private static JSONArray getCityList() {
         try {
             ClassPathResource resource = new ClassPathResource("china_city_data.json");
             InputStream inputStream = resource.getInputStream();
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            String str = new String(bytes, StandardCharsets.UTF_8);
-            return new JSONArray(str);
+            StringBuilder out = new StringBuilder();
+            byte[] buffer = new byte[256];
+            while(inputStream.read(buffer, 0, 256) != -1) {
+                out.append(new String(buffer));
+            }
+            return new JSONArray(out.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
