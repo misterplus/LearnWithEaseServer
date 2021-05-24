@@ -11,4 +11,9 @@ public class TestController {
     public String getSecret() {
         return Constants.getInstance().APP_SECRET;
     }
+
+    @RequestMapping("/key")
+    public String getKey() {
+        return Constants.getInstance().APP_KEY;
+    }
 }
