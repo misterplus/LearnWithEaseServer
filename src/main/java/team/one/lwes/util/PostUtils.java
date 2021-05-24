@@ -1,35 +1,19 @@
 package team.one.lwes.util;
 
-import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 
-import java.io.IOException;
 import java.time.Instant;
-import java.util.Properties;
-
-import static java.lang.System.exit;
 
 public class PostUtils {
 
     private static final String APP_KEY = "57b4c463e5a9cca9ca364a8d0d8c9f39";
-    private static final String APP_SECRET = getAppSecret();
 
-    private static String getAppSecret() {
-        Properties prop = new Properties();
-        try {
-            prop.load(new FileReader(System.getProperty("user.home") + "\\.gradle\\gradle.properties").getInputStream());
-            String secret = prop.getProperty("lwes.secret");
-            if (secret == null || secret.length() == 0)
-                exit(0);
-            return secret;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
+    @Value("${lwe.app.secret}")
+    private static String APP_SECRET;
 
     private static String getTimeStamp() {
         return String.valueOf(Instant.now().getEpochSecond());
