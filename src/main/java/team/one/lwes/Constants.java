@@ -1,30 +1,16 @@
 package team.one.lwes;
 
-import org.springframework.core.io.ClassPathResource;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Properties;
-
 public class Constants {
 
-    public static final String APP_SECRET = getSecret();
+    private static final Constants instance = new Constants();
 
-    private static String getSecret() {
-        try {
-            ClassPathResource resource = new ClassPathResource("application.properties");
-            InputStream inputStream = resource.getInputStream();
-            Properties properties=new Properties();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,"GB2312"));
-            properties.load(reader);
-            return properties.getProperty("spring.datasource.url");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Constants getInstance() {
+        return instance;
     }
 
-    public static final String APP_KEY = "57b4c463e5a9cca9ca364a8d0d8c9f39";
+    private final ConstantLoader loader = new ConstantLoader();
+
+    public String APP_SECRET = loader.APP_SECRET;
+
+    public String APP_KEY = "57b4c463e5a9cca9ca364a8d0d8c9f39";
 }
