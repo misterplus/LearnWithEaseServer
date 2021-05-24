@@ -10,6 +10,5 @@ import org.springframework.stereotype.Component;
 public class Config {
 
     private String appSecret;
-
     private String appKey;
 }

@@ -4,11 +4,21 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
 import org.jetbrains.annotations.NotNull;
-import team.one.lwes.ConfigLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import team.one.lwes.Config;
 
 import java.time.Instant;
 
+@Component
 public class PostUtils {
+
+    public static Config config;
+
+    @Autowired
+    public PostUtils(Config config) {
+        PostUtils.config = config;
+    }
 
     private static String getTimeStamp() {
         return String.valueOf(Instant.now().getEpochSecond());
@@ -19,13 +29,13 @@ public class PostUtils {
         String curTime = getTimeStamp();
         return HttpRequest.post(url)
                 .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                .header("AppKey", ConfigLoader.getInstance().getConfig().getAppKey())
+                .header("AppKey", config.getAppKey())
                 .header("Nonce", nonce)
                 .header("CurTime", curTime)
                 .header("CheckSum", getCheckSum(nonce, curTime));
     }
 
     private static String getCheckSum(String nonce, String curTime) {
-        return SecureUtil.sha1(ConfigLoader.getInstance().getConfig().getAppSecret() + nonce + curTime);
+        return SecureUtil.sha1(config.getAppSecret() + nonce + curTime);
     }
 }
