@@ -19,7 +19,7 @@ public class Constants {
             Properties properties=new Properties();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,"GB2312"));
             properties.load(reader);
-            return properties.getProperty("lwe.app.secret");
+            return properties.getProperty("spring.datasource.url");
         } catch (IOException e) {
             e.printStackTrace();
         }
