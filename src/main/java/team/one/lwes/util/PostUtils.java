@@ -4,7 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
 import org.jetbrains.annotations.NotNull;
-import team.one.lwes.Constants;
+import team.one.lwes.ConfigLoader;
 
 import java.time.Instant;
 
@@ -19,13 +19,13 @@ public class PostUtils {
         String curTime = getTimeStamp();
         return HttpRequest.post(url)
                 .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                .header("AppKey", Constants.getInstance().APP_KEY)
+                .header("AppKey", ConfigLoader.getInstance().getConfig().getAppKey())
                 .header("Nonce", nonce)
                 .header("CurTime", curTime)
                 .header("CheckSum", getCheckSum(nonce, curTime));
     }
 
     private static String getCheckSum(String nonce, String curTime) {
-        return SecureUtil.sha1(Constants.getInstance().APP_SECRET + nonce + curTime);
+        return SecureUtil.sha1(ConfigLoader.getInstance().getConfig().getAppSecret() + nonce + curTime);
     }
 }

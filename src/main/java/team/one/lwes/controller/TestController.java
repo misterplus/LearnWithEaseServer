@@ -1,18 +1,15 @@
-package team.one.lwes;
+package team.one.lwes.controller;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import team.one.lwes.ConfigLoader;
 
 @RestController
 @RequestMapping("/test")
-public class ConstantLoader {
-
-    @Value("${lwe.app.secret}")
-    public String APP_SECRET;
+public class TestController {
 
     @RequestMapping("/secret")
     public String getSecret() {
-        return Constants.getInstance().APP_SECRET;
+        return ConfigLoader.getInstance().getConfig().getAppSecret();
     }
 }
