@@ -19,13 +19,13 @@ public class PostUtils {
         String curTime = getTimeStamp();
         return HttpRequest.post(url)
                 .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                .header("AppKey", Constants.getInstance().APP_KEY)
+                .header("AppKey", Constants.APP_KEY)
                 .header("Nonce", nonce)
                 .header("CurTime", curTime)
                 .header("CheckSum", getCheckSum(nonce, curTime));
     }
 
     private static String getCheckSum(String nonce, String curTime) {
-        return SecureUtil.sha1( Constants.getInstance().APP_SECRET + nonce + curTime);
+        return SecureUtil.sha1( Constants.APP_SECRET + nonce + curTime);
     }
 }

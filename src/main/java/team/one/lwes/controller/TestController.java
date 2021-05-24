@@ -7,13 +7,14 @@ import team.one.lwes.Constants;
 @RestController
 @RequestMapping("/test")
 public class TestController {
+
     @RequestMapping("/secret")
     public String getSecret() {
-        return Constants.getInstance().APP_SECRET;
+        return Constants.APP_SECRET;
     }
 
     @RequestMapping("/key")
     public String getKey() {
-        return Constants.getInstance().APP_KEY;
+        return Constants.APP_KEY;
     }
 }
