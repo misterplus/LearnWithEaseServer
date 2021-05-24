@@ -5,9 +5,11 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.time.Instant;
 
+@EnableAutoConfiguration
 public class PostUtils {
 
     private static final String APP_KEY = "57b4c463e5a9cca9ca364a8d0d8c9f39";
