@@ -31,25 +31,15 @@ public class LearnWithEaseServerApplication implements WebMvcConfigurer {
         SpringApplication.run(LearnWithEaseServerApplication.class, args);
     }
 
-    @Bean
-    public AuthInterceptor authInterceptor() {
-        return new AuthInterceptor();
-    }
-
-    @Bean
-    public CurrentUserResolver currentUserResolver() {
-        return new CurrentUserResolver();
-    }
-
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(currentUserResolver());
+        resolvers.add(new CurrentUserResolver());
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**");
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 
