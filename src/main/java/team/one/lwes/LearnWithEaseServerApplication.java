@@ -5,6 +5,7 @@ import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.apache.tomcat.util.threads.ThreadPoolExecutor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,15 +32,21 @@ public class LearnWithEaseServerApplication implements WebMvcConfigurer {
         SpringApplication.run(LearnWithEaseServerApplication.class, args);
     }
 
+    @Autowired
+    private CurrentUserResolver currentUserResolver;
+
+    @Autowired
+    private AuthInterceptor authInterceptor;
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new CurrentUserResolver());
+        resolvers.add(currentUserResolver);
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/**");
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 
