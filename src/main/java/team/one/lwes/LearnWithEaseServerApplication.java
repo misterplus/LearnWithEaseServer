@@ -13,16 +13,44 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import team.one.lwes.interceptor.AuthInterceptor;
+import team.one.lwes.resolver.CurrentUserResolver;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 @EnableConfigurationProperties(Config.class)
-public class LearnWithEaseServerApplication {
+public class LearnWithEaseServerApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
         SpringApplication.run(LearnWithEaseServerApplication.class, args);
+    }
+
+    @Bean
+    public AuthInterceptor authInterceptor() {
+        return new AuthInterceptor();
+    }
+
+    @Bean
+    public CurrentUserResolver currentUserResolver() {
+        return new CurrentUserResolver();
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(currentUserResolver());
+        WebMvcConfigurer.super.addArgumentResolvers(resolvers);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authInterceptor()).addPathPatterns("/**");
+        WebMvcConfigurer.super.addInterceptors(registry);
     }
 
     @Bean

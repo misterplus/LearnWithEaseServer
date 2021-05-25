@@ -30,6 +30,10 @@ public class Response {
         return new Response(414, paramName + " is invalid");
     }
 
+    public static Response authFailedResp() {
+        return new Response(302, "username or password incorrect");
+    }
+
     //not this, this is only for server side check
     @JsonIgnore
     public boolean isSuccess() {

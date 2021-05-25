@@ -84,7 +84,7 @@ public class UserController {
         String accid = UserUtils.getAccid(username);
         boolean authPassed = UserUtils.auth(loginDao, accid, oldPassword);
         if (!authPassed)
-            return new Response(302, "username or password incorrect");
+            return Response.authFailedResp();
         String newToken = UserUtils.getToken(accid, newPassword);
         Response resp = APIUtils.update(accid, newToken);
         if (resp.isSuccess()) {
