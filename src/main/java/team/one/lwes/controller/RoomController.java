@@ -27,9 +27,9 @@ public class RoomController {
 
     @Auth
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Response create(@CurrentUser LoginInfo user, @RequestBody @NonNull Room room) {
+    public Response create(@CurrentUser LoginInfo user, @RequestBody @NonNull RoomBasic room) {
         String accid = user.getAccid();
-        RoomInfo ext = room.getExtension();
+        RoomInfo ext = room.getExt();
         String name = room.getName();
         int maxUsers = ext.getMaxUsers();
         int timeStudy = ext.getTimeStudy();
@@ -46,7 +46,7 @@ public class RoomController {
         Response chatroom = APIUtils.createChatRoom(accid, name, ext);
         if (!chatroom.isSuccess()) //failed to create chatroom, abort
             return chatroom;
-        String roomId = chatroom.getChatroom().getRoomId(); // get returned roomId
+        String roomId = chatroom.getChatroom().getRoomid(); // get returned roomId
         long uid = user.getUid();
         Response roomToken = APIUtils.getRoomToken(uid, roomId); //token for video room
         if (!roomToken.isSuccess())

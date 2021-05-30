@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Room {
-    private RoomInfo extension;
-    private String roomId;
-    private String name;
+public class ChatRoom {
+    private String roomid, name;
+    private RoomInfo ext;
 }
