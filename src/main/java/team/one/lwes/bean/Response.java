@@ -14,7 +14,9 @@ import lombok.NoArgsConstructor;
 public class Response {
     private int code;
     private JSONObject info;
-    private String desc;
+    private Room chatroom;
+    //token field is for video room token
+    private String desc, token;
 
     public Response(int code, String desc) {
         this.code = code;

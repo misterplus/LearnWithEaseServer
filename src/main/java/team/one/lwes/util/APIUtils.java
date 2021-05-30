@@ -3,8 +3,9 @@ package team.one.lwes.util;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import org.jetbrains.annotations.NotNull;
-import team.one.lwes.bean.NERtcResponse;
+import org.springframework.lang.NonNull;
 import team.one.lwes.bean.Response;
+import team.one.lwes.bean.RoomInfo;
 import team.one.lwes.bean.User;
 
 public class APIUtils {
@@ -34,16 +35,28 @@ public class APIUtils {
         return JSONUtil.toBean(resp.body(), Response.class);
     }
 
-    public static NERtcResponse getRoomToken(long uid, @NotNull String channelName) {
+    public static Response getRoomToken(long uid, @NotNull String roomId) {
         HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/user/getToken.action")
                 .form(
                         "uid", uid,
-                        "channelName", channelName,
+                        "channelName", roomId,
                         "repeatUse", false,
                         "expireAt", 30
                 )
                 .timeout(5000)
                 .execute();
-        return JSONUtil.toBean(resp.body(), NERtcResponse.class);
+        return JSONUtil.toBean(resp.body(), Response.class);
+    }
+
+    public static Response createChatRoom(@NonNull String creator, @NonNull String name, @NonNull RoomInfo ext) {
+        HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/chatroom/create.action")
+                .form(
+                        "creator", creator,
+                        "name", name,
+                        "ext", JSONUtil.toJsonStr(ext)
+                )
+                .timeout(5000)
+                .execute();
+        return JSONUtil.toBean(resp.body(), Response.class);
     }
 }
