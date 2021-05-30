@@ -43,7 +43,7 @@ public class LoginInfoDaoImpl implements LoginInfoDao {
 
     @Override
     public LoginInfo getUser(String accid) {
-        List<LoginInfo> info = db.query("select uid from login_info where accid = ?", new BeanPropertyRowMapper(LoginInfo.class), accid);
+        List<LoginInfo> info = db.query("select * from login_info where accid = ?", new BeanPropertyRowMapper(LoginInfo.class), accid);
         if (info.size() > 0)
             return info.get(0);
         return null;
