@@ -46,13 +46,14 @@ public class RoomController {
         Response chatroom = APIUtils.createChatRoom(accid, name, ext);
         if (!chatroom.isSuccess()) //failed to create chatroom, abort
             return chatroom;
-        String roomId = chatroom.getChatroom().getRoomid(); // get returned roomId
+        EnterRoomData enterRoomData = chatroom.getChatroom();
+        String roomId = enterRoomData.getRoomid(); // get returned roomId
         long uid = user.getUid();
         Response roomToken = APIUtils.getRoomToken(uid, roomId); //token for video room
         if (!roomToken.isSuccess())
             return roomToken; //this shouldn't happen tho
-        chatroom.setToken(roomToken.getToken()); //return video room token
-        chatroom.setInfo(new JSONObject().set("uid", uid)); //return uid as well for later
+        enterRoomData.setToken(roomToken.getToken());
+        enterRoomData.setUid(uid);
         //TODO: add room info to database for later fetching
         return chatroom;
     }
