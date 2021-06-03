@@ -1,17 +1,22 @@
 package team.one.lwes.controller;
 
 import cn.hutool.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import team.one.lwes.annotation.Auth;
 import team.one.lwes.annotation.CurrentUser;
 import team.one.lwes.bean.*;
+import team.one.lwes.dao.impl.RoomInfoDaoImpl;
 import team.one.lwes.util.APIUtils;
 import team.one.lwes.util.UserUtils;
 
 @RestController
 @RequestMapping("/room")
 public class RoomController {
+
+    @Autowired
+    private RoomInfoDaoImpl roomInfoDao;
 
     @Auth
     @RequestMapping(value = "/getToken", method = RequestMethod.POST)
@@ -27,8 +32,8 @@ public class RoomController {
 
     @Auth
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Response create(@CurrentUser LoginInfo user, @RequestBody @NonNull RoomBasic room) {
-        String accid = user.getAccid();
+    public Response create(@CurrentUser LoginInfo loginInfo, @CurrentUser User user, @RequestBody @NonNull RoomBasic room) {
+        String accid = loginInfo.getAccid();
         RoomInfo ext = room.getExt();
         String name = room.getName();
         int maxUsers = ext.getMaxUsers();
@@ -48,13 +53,16 @@ public class RoomController {
             return chatroom;
         EnterRoomData enterRoomData = chatroom.getChatroom();
         String roomId = enterRoomData.getRoomid(); // get returned roomId
-        long uid = user.getUid();
+        long uid = loginInfo.getUid();
         Response roomToken = APIUtils.getRoomToken(uid, roomId); //token for video room
         if (!roomToken.isSuccess())
             return roomToken; //this shouldn't happen tho
         enterRoomData.setToken(roomToken.getToken());
         enterRoomData.setUid(uid);
         //TODO: add room info to database for later fetching
+        roomInfoDao.saveChatRoomInfo(Integer.parseInt(roomId), room.getExt().getContentStudy(),
+                user.getGender(), user.getEx().getProvince(), user.getEx().getCity(), user.getEx().getArea(), user.getEx().getSchool());
+
         return chatroom;
     }
 }
