@@ -61,10 +61,12 @@ public class RoomController {
         enterRoomData.setToken(roomToken.getToken());
         enterRoomData.setUid(uid);
         //TODO: add room info to database for later fetching
-        Response user = APIUtils.getUserInfo(accid);
-        UserInfo userInfo = JSONUtil.toBean((JSONObject) user.getInfo().get("ex"), UserInfo.class);
-        roomInfoDao.saveChatRoomInfo(Integer.parseInt(roomId), room.getExt().getContentStudy(),
-                (int) user.getInfo().get("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
+        new Thread(() -> {
+            Response user = APIUtils.getUserInfo(accid);
+            UserInfo userInfo = JSONUtil.toBean((JSONObject) user.getInfo().get("ex"), UserInfo.class);
+            roomInfoDao.saveChatRoomInfo(Integer.parseInt(roomId), room.getExt().getContentStudy(),
+                    (int) user.getInfo().get("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
+        }).start();
 
         return chatroom;
     }
