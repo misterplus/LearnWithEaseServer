@@ -22,6 +22,11 @@ public class RoomInfoDaoImpl implements RoomInfoDao {
     }
 
     @Override
+    public void removeChatRoomInfo(int room_id) {
+        db.execute("delete * from chat_room where room_id = "+room_id);
+    }
+
+    @Override
     public int getContentStudy(int room_id) {
         List<ChatRoomInfo> info = db.query("select content_study from chat_room where room_id = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), room_id);
         if (info.size() > 0)

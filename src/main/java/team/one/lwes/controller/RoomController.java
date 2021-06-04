@@ -1,6 +1,7 @@
 package team.one.lwes.controller;
 
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class RoomController {
 
     @Auth
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Response create(@CurrentUser LoginInfo loginInfo, @CurrentUser User user, @RequestBody @NonNull RoomBasic room) {
+    public Response create(@CurrentUser LoginInfo loginInfo, @RequestBody @NonNull RoomBasic room) {
         String accid = loginInfo.getAccid();
         RoomInfo ext = room.getExt();
         String name = room.getName();
@@ -60,8 +61,10 @@ public class RoomController {
         enterRoomData.setToken(roomToken.getToken());
         enterRoomData.setUid(uid);
         //TODO: add room info to database for later fetching
+        Response user = APIUtils.getUserInfo(accid);
+        UserInfo userInfo = JSONUtil.toBean((JSONObject) user.getInfo().get("ex"), UserInfo.class);
         roomInfoDao.saveChatRoomInfo(Integer.parseInt(roomId), room.getExt().getContentStudy(),
-                user.getGender(), user.getEx().getProvince(), user.getEx().getCity(), user.getEx().getArea(), user.getEx().getSchool());
+                (int) user.getInfo().get("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
 
         return chatroom;
     }

@@ -59,4 +59,14 @@ public class APIUtils {
                 .execute();
         return JSONUtil.toBean(resp.body(), Response.class);
     }
+
+    public static Response getUserInfo(@NotNull String accid) {
+        HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/user/getUinfos.action")
+                .form(
+                        "accid", accid
+                )
+                .timeout(5000)
+                .execute();
+        return JSONUtil.toBean(resp.body(), Response.class);
+    }
 }

@@ -6,6 +6,8 @@ public interface RoomInfoDao {
 
     void saveChatRoomInfo(int room_id, int content_study, int gender, String province, String city, String area, String school);
 
+    void removeChatRoomInfo(int room_id);
+
     int getContentStudy(int room_id);
 
     int getGender(int room_id);
