@@ -4,21 +4,25 @@ import team.one.lwes.bean.ChatRoomInfo;
 
 public interface RoomInfoDao {
 
-    void saveChatRoomInfo(int room_id, int content_study, int gender, String province, String city, String area, String school);
+    void saveChatRoomInfo(String roomId, int timeStudy, int timeRest, int contentStudy, int gender, String province, String city, String area, String school);
 
-    void removeChatRoomInfo(int room_id);
+    void removeChatRoomInfo(String roomId);
 
-    int getContentStudy(int room_id);
+    int getTimeStudy(String roomId);
 
-    int getGender(int room_id);
+    int getTimeRest(String roomId);
 
-    String getProvince(int room_id);
+    int getContentStudy(String roomId);
 
-    String getCity(int room_id);
+    int getGender(String roomId);
 
-    String getArea(int room_id);
+    String getProvince(String roomId);
 
-    String getSchool(int room_id);
+    String getCity(String roomId);
 
-    ChatRoomInfo getChatRoomInfo(int room_id);
+    String getArea(String roomId);
+
+    String getSchool(String roomId);
+
+    ChatRoomInfo getChatRoomInfo(String roomId);
 }

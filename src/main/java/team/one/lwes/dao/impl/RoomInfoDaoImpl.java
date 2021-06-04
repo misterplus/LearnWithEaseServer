@@ -16,67 +16,83 @@ public class RoomInfoDaoImpl implements RoomInfoDao {
     private JdbcTemplate db;
 
     @Override
-    public void saveChatRoomInfo(int room_id, int content_study, int gender, String province, String city, String area, String school) {
-        db.update("insert into chat_room(room_id, content_study, gender, province, city, area, school) values(?,?,?,?,?,?,?)",
-                room_id, content_study, gender, province, city, area, school);
+    public void saveChatRoomInfo(String roomId, int timeStudy, int timeRest, int content_study, int gender, String province, String city, String area, String school) {
+        db.update("insert into chat_room(roomId, timeStudy, timeRest, contentStudy, gender, province, city, area, school) values(?,?,?,?,?,?,?,?,?)",
+                roomId, timeStudy, timeRest, content_study, gender, province, city, area, school);
     }
 
     @Override
-    public void removeChatRoomInfo(int room_id) {
-        db.execute("delete * from chat_room where room_id = "+room_id);
+    public void removeChatRoomInfo(String roomId) {
+        db.execute("delete * from chat_room where roomId = " + roomId);
     }
 
     @Override
-    public int getContentStudy(int room_id) {
-        List<ChatRoomInfo> info = db.query("select content_study from chat_room where room_id = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), room_id);
+    public int getTimeStudy(String roomId) {
+        List<ChatRoomInfo> info = db.query("select timeStudy from chat_room where roomId = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), roomId);
         if (info.size() > 0)
-            return info.get(0).getContent_study();
+            return info.get(0).getTimeStudy();
         return -1;
     }
 
     @Override
-    public ChatRoomInfo getChatRoomInfo(int room_id) {
-        List<ChatRoomInfo> info = db.query("select content_study from chat_room where room_id = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), room_id);
+    public int getTimeRest(String roomId) {
+        List<ChatRoomInfo> info = db.query("select timeRest from chat_room where roomId = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), roomId);
+        if (info.size() > 0)
+            return info.get(0).getTimeRest();
+        return -1;
+    }
+
+    @Override
+    public int getContentStudy(String roomId) {
+        List<ChatRoomInfo> info = db.query("select contentStudy from chat_room where roomId = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), roomId);
+        if (info.size() > 0)
+            return info.get(0).getContentStudy();
+        return -1;
+    }
+
+    @Override
+    public ChatRoomInfo getChatRoomInfo(String roomId) {
+        List<ChatRoomInfo> info = db.query("select * from chat_room where roomId = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), roomId);
         if (info.size() > 0)
             return info.get(0);
         return null;
     }
 
     @Override
-    public int getGender(int room_id) {
-        List<ChatRoomInfo> info = db.query("select content_study from chat_room where room_id = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), room_id);
+    public int getGender(String roomId) {
+        List<ChatRoomInfo> info = db.query("select gender from chat_room where roomId = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), roomId);
         if (info.size() > 0)
             return info.get(0).getGender();
         return -1;
     }
 
     @Override
-    public String getProvince(int room_id) {
-        List<ChatRoomInfo> info = db.query("select content_study from chat_room where room_id = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), room_id);
+    public String getProvince(String roomId) {
+        List<ChatRoomInfo> info = db.query("select province from chat_room where roomId = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), roomId);
         if (info.size() > 0)
             return info.get(0).getProvince();
         return null;
     }
 
     @Override
-    public String getCity(int room_id) {
-        List<ChatRoomInfo> info = db.query("select content_study from chat_room where room_id = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), room_id);
+    public String getCity(String roomId) {
+        List<ChatRoomInfo> info = db.query("select city from chat_room where roomId = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), roomId);
         if (info.size() > 0)
             return info.get(0).getCity();
         return null;
     }
 
     @Override
-    public String getArea(int room_id) {
-        List<ChatRoomInfo> info = db.query("select content_study from chat_room where room_id = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), room_id);
+    public String getArea(String roomId) {
+        List<ChatRoomInfo> info = db.query("select area from chat_room where roomId = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), roomId);
         if (info.size() > 0)
             return info.get(0).getArea();
         return null;
     }
 
     @Override
-    public String getSchool(int room_id) {
-        List<ChatRoomInfo> info = db.query("select content_study from chat_room where room_id = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), room_id);
+    public String getSchool(String roomId) {
+        List<ChatRoomInfo> info = db.query("select school from chat_room where roomId = ?", new BeanPropertyRowMapper(ChatRoomInfo.class), roomId);
         if (info.size() > 0)
             return info.get(0).getSchool();
         return null;

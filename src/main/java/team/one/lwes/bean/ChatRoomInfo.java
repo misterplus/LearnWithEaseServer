@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatRoomInfo {
-    private int room_id, content_study, gender;
-    private String province, city, area, school;
+    private int timeStudy, timeRest, contentStudy, gender;
+    private String roomId, province, city, area, school;
 }
