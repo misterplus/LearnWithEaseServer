@@ -12,4 +12,6 @@ public interface LoginInfoDao {
     long getUid(String accid);
 
     LoginInfo getUser(String accid);
+
+    String getAccid(long uid);
 }

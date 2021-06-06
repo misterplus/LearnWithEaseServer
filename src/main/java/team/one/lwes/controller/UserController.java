@@ -93,4 +93,12 @@ public class UserController {
         }
         return resp;
     }
+
+    @RequestMapping(value = "getAccid", method = RequestMethod.POST)
+    public Response getAccid(@RequestParam long uid) {
+        String accid = loginDao.getAccid(uid);
+        if (accid == null)
+            return Response.invalidParamResp("uid");
+        return new Response(200, new JSONObject().set("accid", accid));
+    }
 }
