@@ -37,7 +37,7 @@ public class RoomController {
     @Auth
     @RequestMapping(value = "/fetch", method = RequestMethod.GET)
     public Response fetch(@CurrentUser LoginInfo user) {
-        //get recommended rooms for current user
+        //TODO: get recommended rooms for current user
         Set<String> recIds = new HashSet<>();
         Response userResp = APIUtils.getUserInfo(user.getAccid());
         UserInfo userInfo = JSONUtil.toBean(userResp.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
@@ -78,7 +78,7 @@ public class RoomController {
         enterRoomData.setToken(roomToken.getToken());
         enterRoomData.setUid(uid);
         //TODO: save to db when callback, not here
-        new Thread(() -> saveRoom(accid, roomId, room)).start();
+        //new Thread(() -> saveRoom(accid, roomId, room)).start();
 
         return chatroom;
     }

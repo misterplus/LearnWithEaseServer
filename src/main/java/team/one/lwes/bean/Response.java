@@ -30,6 +30,10 @@ public class Response {
         this.info = info;
     }
 
+    public Response(int code) {
+        this.code = code;
+    }
+
     public static Response invalidParamResp(String paramName) {
         return new Response(414, paramName + " is invalid");
     }
