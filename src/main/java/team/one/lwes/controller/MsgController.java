@@ -33,14 +33,11 @@ public class MsgController {
         String curTime = request.getHeader("CurTime");
         String checkSum = request.getHeader("CheckSum");
         String checkSumCal = SecureUtil.sha1(config.getAppSecret() + md5 + curTime);
-        logger.info(appKey);
-        logger.info(md5);
-        logger.info(curTime);
-        logger.info(checkSum);
-        logger.info(checkSumCal);
-        logger.info(content);
-        logger.info(SecureUtil.md5(content));
-        if (!contentType.equals("application/json") || !appKey.equals(config.getAppKey()) || !checkSumCal.equals(checkSum) || !SecureUtil.md5(content).equals(md5)) {
+        boolean b1 = !contentType.equals("application/json");
+        boolean b2 = !checkSumCal.equals(checkSum);
+        boolean b3 = !SecureUtil.md5(content).equals(md5);
+        logger.info(b1 + " " + b2 + " " + b3);
+        if (b1 || b2 || b3) {
             return new Response(414);
         }
         JSONObject json = new JSONObject(content);
