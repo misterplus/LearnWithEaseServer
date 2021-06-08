@@ -1,17 +1,26 @@
 package team.one.lwes.controller;
 
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import team.one.lwes.annotation.Auth;
 import team.one.lwes.annotation.CurrentUser;
 import team.one.lwes.bean.*;
+import team.one.lwes.dao.impl.StudyRoomInfoDaoImpl;
 import team.one.lwes.util.APIUtils;
 import team.one.lwes.util.UserUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/room")
 public class RoomController {
+
+    @Autowired
+    private StudyRoomInfoDaoImpl roomDao;
 
     @Auth
     @RequestMapping(value = "/getToken", method = RequestMethod.POST)
@@ -23,6 +32,20 @@ public class RoomController {
         if (resp.isSuccess())
             resp.setInfo(new JSONObject().set("uid", uid));
         return resp;
+    }
+
+    @Auth
+    @RequestMapping(value = "/fetch", method = RequestMethod.GET)
+    public Response fetch(@CurrentUser LoginInfo user) {
+        //TODO: get recommended rooms for current user
+        Set<String> recIds = new HashSet<>();
+        Response userResp = APIUtils.getUserInfo(user.getAccid());
+        UserInfo userInfo = JSONUtil.toBean(userResp.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
+        if (!userInfo.getSchool().equals("")) {
+            recIds.addAll(roomDao.getRoomsBySchool(userInfo.getSchool()));
+        }
+        recIds.addAll(roomDao.getRoomsByContentStudy(userInfo.getPref().getContentStudy()));
+        return null;
     }
 
     @Auth
@@ -54,7 +77,19 @@ public class RoomController {
             return roomToken; //this shouldn't happen tho
         enterRoomData.setToken(roomToken.getToken());
         enterRoomData.setUid(uid);
-        //TODO: add room info to database for later fetching
+        //TODO: save to db when callback, not here
+        //new Thread(() -> saveRoom(accid, roomId, room)).start();
+
         return chatroom;
+    }
+
+    private void saveRoom(String accid, String roomId, RoomBasic room) {
+        Response user = APIUtils.getUserInfo(accid);
+        if (user.isSuccess()) {
+            UserInfo userInfo = JSONUtil.toBean(user.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
+            roomDao.saveStudyRoomInfo(roomId, room.getExt().getTimeStudy(), room.getExt().getTimeRest(), room.getExt().getContentStudy(), user.getInfo().getInt("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
+        } else {
+            saveRoom(accid, roomId, room);
+        }
     }
 }

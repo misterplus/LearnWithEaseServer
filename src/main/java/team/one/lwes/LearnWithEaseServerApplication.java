@@ -28,15 +28,14 @@ import java.util.concurrent.TimeUnit;
 @EnableConfigurationProperties(Config.class)
 public class LearnWithEaseServerApplication implements WebMvcConfigurer {
 
+    @Autowired
+    private CurrentUserResolver currentUserResolver;
+    @Autowired
+    private AuthInterceptor authInterceptor;
+
     public static void main(String[] args) {
         SpringApplication.run(LearnWithEaseServerApplication.class, args);
     }
-
-    @Autowired
-    private CurrentUserResolver currentUserResolver;
-
-    @Autowired
-    private AuthInterceptor authInterceptor;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {

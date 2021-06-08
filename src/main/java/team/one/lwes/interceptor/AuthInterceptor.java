@@ -1,5 +1,6 @@
 package team.one.lwes.interceptor;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -18,7 +19,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     private LWEAuthService authService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod))
             return true;
         HandlerMethod handlerMethod = (HandlerMethod) handler;
