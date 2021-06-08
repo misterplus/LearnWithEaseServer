@@ -68,8 +68,7 @@ public class MsgController {
         if (user.isSuccess() && room.isSuccess()) {
             UserInfo userInfo = JSONUtil.toBean(user.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
             RoomInfo roominfo = room.getChatroom().getExt();
-            logger.info(user.getUinfos().getJSONObject(0).getStr("ex"));
-            logger.info(String.valueOf(roominfo.getTimeRest()));
+            logger.info(roominfo.toString());
             roomDao.saveStudyRoomInfo(roomId, roominfo.getTimeStudy(), roominfo.getTimeRest(), roominfo.getContentStudy(), user.getInfo().getInt("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
         } else {
             saveRoom(accid, roomId);
