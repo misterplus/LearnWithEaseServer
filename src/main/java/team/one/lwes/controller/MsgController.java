@@ -33,6 +33,7 @@ public class MsgController {
         String curTime = request.getHeader("CurTime");
         String checkSum = request.getHeader("CheckSum");
         String checkSumCal = SecureUtil.sha1(config.getAppSecret() + md5 + curTime);
+        logger.info(contentType);
         boolean b1 = !contentType.equals("application/json");
         boolean b2 = !checkSumCal.equals(checkSum);
         boolean b3 = !SecureUtil.md5(content).equals(md5);
