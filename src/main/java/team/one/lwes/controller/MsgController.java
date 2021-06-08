@@ -46,6 +46,7 @@ public class MsgController {
         }
         JSONObject json = new JSONObject(content);
         int eventType = json.getInt("eventType");
+        logger.info(String.valueOf(eventType));
         String roomId = json.getStr("roomId");
         switch (eventType) {
             case 9: {
