@@ -1,5 +1,6 @@
 package team.one.lwes.bean;
 
+import cn.hutool.json.JSONObject;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class EnterRoomData {
     private String roomid, token;
     private long uid;
-    private RoomInfo ext;
+    private JSONObject ext;
 }
