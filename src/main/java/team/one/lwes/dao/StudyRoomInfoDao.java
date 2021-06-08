@@ -10,17 +10,21 @@ public interface StudyRoomInfoDao {
 
     void removeStudyRoomInfo(String roomId);
 
-    List<String> getRoomIdByTimeStudy(int timeStudy);
+    List<String> getRoomsByTimeStudy(int timeStudy);
 
-    List getRoomIdByTimeRest(int timeRest);
+    List<String> getRoomsByTimeRest(int timeRest);
 
-    List getRoomIdByContentStudy(int contentStudy);
+    List<String> getRoomsByContentStudy(int contentStudy);
 
-    List getRoomIdByGender(int gender);
+    List<String> getRoomsByGender(int gender);
 
-    List getRoomIdByPlace(String province, String city, String area);
+    List<String> getRoomsByPlace(String province, String city, String area);
 
-    List getRoomIdBySchool(String school);
+    List<String> getRoomsByPlace(String province, String city);
+
+    List<String> getRoomsByPlace(String province);
+
+    List<String> getRoomsBySchool(String school);
 
     StudyRoomInfo getStudyRoomInfo(String roomId);
 }
