@@ -63,7 +63,7 @@ public class APIUtils {
     public static Response getUserInfo(@NotNull String accid) {
         HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/user/getUinfos.action")
                 .form(
-                        "accid", accid
+                        "accids", "[\"" + accid + "\"]"
                 )
                 .timeout(5000)
                 .execute();

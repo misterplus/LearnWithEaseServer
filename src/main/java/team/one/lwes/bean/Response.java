@@ -1,5 +1,6 @@
 package team.one.lwes.bean;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -17,6 +18,7 @@ public class Response {
     private EnterRoomData chatroom;
     //token field is for video room token
     private String desc, token;
+    private JSONArray uinfos;
 
     public Response(int code, String desc) {
         this.code = code;

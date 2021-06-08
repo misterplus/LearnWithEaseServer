@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import team.one.lwes.annotation.Auth;
 import team.one.lwes.annotation.CurrentUser;
 import team.one.lwes.bean.*;
-import team.one.lwes.dao.impl.RoomInfoDaoImpl;
+import team.one.lwes.dao.impl.StudyRoomInfoDaoImpl;
 import team.one.lwes.util.APIUtils;
 import team.one.lwes.util.UserUtils;
 
@@ -17,7 +17,7 @@ import team.one.lwes.util.UserUtils;
 public class RoomController {
 
     @Autowired
-    private RoomInfoDaoImpl roomInfoDao;
+    private StudyRoomInfoDaoImpl roomInfoDao;
 
     @Auth
     @RequestMapping(value = "/getToken", method = RequestMethod.POST)
@@ -32,9 +32,15 @@ public class RoomController {
     }
 
     @Auth
+    @RequestMapping(value = "/fetch", method = RequestMethod.GET)
+    public Response fetch(@CurrentUser LoginInfo user) {
+        return null;
+    }
+
+    @Auth
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Response create(@CurrentUser LoginInfo loginInfo, @RequestBody @NonNull RoomBasic room) {
-        String accid = loginInfo.getAccid();
+    public Response create(@CurrentUser LoginInfo user, @RequestBody @NonNull RoomBasic room) {
+        String accid = user.getAccid();
         RoomInfo ext = room.getExt();
         String name = room.getName();
         int maxUsers = ext.getMaxUsers();
@@ -54,25 +60,25 @@ public class RoomController {
             return chatroom;
         EnterRoomData enterRoomData = chatroom.getChatroom();
         String roomId = enterRoomData.getRoomid(); // get returned roomId
-        long uid = loginInfo.getUid();
+        long uid = user.getUid();
         Response roomToken = APIUtils.getRoomToken(uid, roomId); //token for video room
         if (!roomToken.isSuccess())
             return roomToken; //this shouldn't happen tho
         enterRoomData.setToken(roomToken.getToken());
         enterRoomData.setUid(uid);
         //TODO: add room info to database for later fetching
-        new Thread(() -> saveToDB(accid, roomId, room)).start();
+        new Thread(() -> saveRoomToDB(accid, roomId, room)).start();
 
         return chatroom;
     }
 
-    public void saveToDB(String accid, String roomId, RoomBasic room) {
+    private void saveRoomToDB(String accid, String roomId, RoomBasic room) {
         Response user = APIUtils.getUserInfo(accid);
         if (user.isSuccess()) {
-            UserInfo userInfo = JSONUtil.toBean(user.getInfo().getStr("ex"), UserInfo.class);
-            roomInfoDao.saveChatRoomInfo(roomId, room.getExt().getTimeStudy(), room.getExt().getTimeRest(), room.getExt().getContentStudy(), user.getInfo().getInt("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
+            UserInfo userInfo = JSONUtil.toBean(user.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
+            roomInfoDao.saveStudyRoomInfo(roomId, room.getExt().getTimeStudy(), room.getExt().getTimeRest(), room.getExt().getContentStudy(), user.getInfo().getInt("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
         } else {
-            saveToDB(accid, roomId, room);
+            saveRoomToDB(accid, roomId, room);
         }
     }
 }
