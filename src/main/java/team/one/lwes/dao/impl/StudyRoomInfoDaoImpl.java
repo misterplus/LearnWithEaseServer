@@ -1,9 +1,12 @@
 package team.one.lwes.dao.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import team.one.lwes.LearnWithEaseServerApplication;
 import team.one.lwes.bean.StudyRoomInfo;
 import team.one.lwes.dao.StudyRoomInfoDao;
 
@@ -17,8 +20,10 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
 
     @Override
     public void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int content_study, int gender, String province, String city, String area, String school) {
-        db.update("insert into study_room(roomId, timeStudy, timeRest, contentStudy, gender, province, city, area, school) values(?,?,?,?,?,?,?,?,?)",
+        int affected = db.update("insert into study_room(roomId, timeStudy, timeRest, contentStudy, gender, province, city, area, school) values(?,?,?,?,?,?,?,?,?)",
                 roomId, timeStudy, timeRest, content_study, gender, province, city, area, school);
+        Logger logger= LoggerFactory.getLogger(LearnWithEaseServerApplication.class);
+        logger.info(String.valueOf(affected));
     }
 
     @Override
