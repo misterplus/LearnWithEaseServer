@@ -26,6 +26,8 @@ public class MsgController {
     @CC
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
     public Response receiveMsg(HttpServletRequest request, @RequestBody String content) {
+        Logger logger= LoggerFactory.getLogger(LearnWithEaseServerApplication.class);
+        logger.info("test start");
         String contentType = request.getContentType();
         String appKey = request.getHeader("AppKey");
         String md5 = request.getHeader("MD5");
@@ -36,7 +38,7 @@ public class MsgController {
             return new Response(414);
         }
         JSONObject json = new JSONObject(content);
-        Logger logger= LoggerFactory.getLogger(LearnWithEaseServerApplication.class);
+
         logger.info("debug:");
         logger.info(json.getStr("eventType"));
         return new Response(200);
