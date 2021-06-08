@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class EnterRoomData {
     private String roomid, token;
     private long uid;
+    private RoomInfo ext;
 }

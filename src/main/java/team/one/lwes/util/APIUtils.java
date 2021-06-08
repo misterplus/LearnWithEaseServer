@@ -69,4 +69,14 @@ public class APIUtils {
                 .execute();
         return JSONUtil.toBean(resp.body(), Response.class);
     }
+
+    public static Response getRoomInfo(@NotNull String roomid) {
+        HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/chatroom/get.action")
+                .form(
+                        "roomid", roomid
+                )
+                .timeout(5000)
+                .execute();
+        return JSONUtil.toBean(resp.body(), Response.class);
+    }
 }

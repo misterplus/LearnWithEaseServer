@@ -77,19 +77,6 @@ public class RoomController {
             return roomToken; //this shouldn't happen tho
         enterRoomData.setToken(roomToken.getToken());
         enterRoomData.setUid(uid);
-        //TODO: save to db when callback, not here
-        //new Thread(() -> saveRoom(accid, roomId, room)).start();
-
         return chatroom;
-    }
-
-    private void saveRoom(String accid, String roomId, RoomBasic room) {
-        Response user = APIUtils.getUserInfo(accid);
-        if (user.isSuccess()) {
-            UserInfo userInfo = JSONUtil.toBean(user.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
-            roomDao.saveStudyRoomInfo(roomId, room.getExt().getTimeStudy(), room.getExt().getTimeRest(), room.getExt().getContentStudy(), user.getInfo().getInt("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
-        } else {
-            saveRoom(accid, roomId, room);
-        }
     }
 }
