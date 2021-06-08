@@ -34,7 +34,6 @@ public class MsgController {
     @CC
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
     public Response receiveMsg(HttpServletRequest request, @RequestBody String content) {
-        Logger logger= LoggerFactory.getLogger(LearnWithEaseServerApplication.class);
         String contentType = request.getContentType();
         String appKey = request.getHeader("AppKey");
         String md5 = request.getHeader("MD5");
@@ -46,7 +45,6 @@ public class MsgController {
         }
         JSONObject json = new JSONObject(content);
         int eventType = json.getInt("eventType");
-        logger.info(String.valueOf(eventType));
         String roomId = json.getStr("roomId");
         switch (eventType) {
             case 9: {
@@ -55,7 +53,7 @@ public class MsgController {
                 break;
             }
             case 10: {
-                new Thread(() -> removeRoom(roomId));
+                new Thread(() -> removeRoom(roomId)).start();
                 break;
             }
             default:

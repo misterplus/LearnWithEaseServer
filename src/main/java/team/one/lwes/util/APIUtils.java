@@ -3,7 +3,10 @@ package team.one.lwes.util;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
+import team.one.lwes.LearnWithEaseServerApplication;
 import team.one.lwes.bean.Response;
 import team.one.lwes.bean.RoomInfo;
 import team.one.lwes.bean.User;
@@ -61,22 +64,26 @@ public class APIUtils {
     }
 
     public static Response getUserInfo(@NotNull String accid) {
+        Logger logger= LoggerFactory.getLogger(LearnWithEaseServerApplication.class);
         HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/user/getUinfos.action")
                 .form(
                         "accids", "[\"" + accid + "\"]"
                 )
                 .timeout(5000)
                 .execute();
+        logger.info(resp.body());
         return JSONUtil.toBean(resp.body(), Response.class);
     }
 
     public static Response getRoomInfo(@NotNull String roomid) {
+        Logger logger= LoggerFactory.getLogger(LearnWithEaseServerApplication.class);
         HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/chatroom/get.action")
                 .form(
                         "roomid", roomid
                 )
                 .timeout(5000)
                 .execute();
+        logger.info(resp.body());
         return JSONUtil.toBean(resp.body(), Response.class);
     }
 }
