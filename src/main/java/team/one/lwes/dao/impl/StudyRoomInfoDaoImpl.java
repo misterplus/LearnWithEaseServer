@@ -22,32 +22,56 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
     }
 
     @Override
+    public List getRoomIdByTimeStudy(int timeStudy) {
+        List roomId = db.query("select roomId from study_room where timeStudy = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), timeStudy);
+        if (roomId.size() > 0)
+            return roomId;
+        return null;
+    }
+
+    @Override
+    public List getRoomIdByTimeRest(int timeRest) {
+        List roomId = db.query("select roomId from study_room where timeRest = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), timeRest);
+        if (roomId.size() > 0)
+            return roomId;
+        return null;
+    }
+
+    @Override
+    public List getRoomIdByContentStudy(int contentStudy) {
+        List roomId = db.query("select roomId from study_room where contentStudy = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), contentStudy);
+        if (roomId.size() > 0)
+            return roomId;
+        return null;
+    }
+
+    @Override
+    public List getRoomIdByGender(int gender) {
+        List roomId = db.query("select roomId from study_room where gender = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), gender);
+        if (roomId.size() > 0)
+            return roomId;
+        return null;
+    }
+
+    @Override
+    public List getRoomIdByPlace(String province, String city, String area) {
+        List roomId = db.query("select roomId from study_room where province = ? and city = ? and area = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), province, city, area);
+        if (roomId.size() > 0)
+            return roomId;
+        return null;
+    }
+
+    @Override
+    public List getRoomIdBySchool(String school) {
+        List roomId = db.query("select roomId from study_room where school = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), school);
+        if (roomId.size() > 0)
+            return roomId;
+        return null;
+    }
+
+    @Override
     public void removeStudyRoomInfo(String roomId) {
         db.execute("delete * from study_room where roomId = " + roomId);
-    }
-
-    @Override
-    public int getTimeStudy(String roomId) {
-        List<StudyRoomInfo> info = db.query("select timeStudy from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
-        if (info.size() > 0)
-            return info.get(0).getTimeStudy();
-        return -1;
-    }
-
-    @Override
-    public int getTimeRest(String roomId) {
-        List<StudyRoomInfo> info = db.query("select timeRest from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
-        if (info.size() > 0)
-            return info.get(0).getTimeRest();
-        return -1;
-    }
-
-    @Override
-    public int getContentStudy(String roomId) {
-        List<StudyRoomInfo> info = db.query("select contentStudy from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
-        if (info.size() > 0)
-            return info.get(0).getContentStudy();
-        return -1;
     }
 
     @Override
@@ -55,46 +79,6 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
         List<StudyRoomInfo> info = db.query("select * from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
         if (info.size() > 0)
             return info.get(0);
-        return null;
-    }
-
-    @Override
-    public int getGender(String roomId) {
-        List<StudyRoomInfo> info = db.query("select gender from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
-        if (info.size() > 0)
-            return info.get(0).getGender();
-        return -1;
-    }
-
-    @Override
-    public String getProvince(String roomId) {
-        List<StudyRoomInfo> info = db.query("select province from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
-        if (info.size() > 0)
-            return info.get(0).getProvince();
-        return null;
-    }
-
-    @Override
-    public String getCity(String roomId) {
-        List<StudyRoomInfo> info = db.query("select city from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
-        if (info.size() > 0)
-            return info.get(0).getCity();
-        return null;
-    }
-
-    @Override
-    public String getArea(String roomId) {
-        List<StudyRoomInfo> info = db.query("select area from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
-        if (info.size() > 0)
-            return info.get(0).getArea();
-        return null;
-    }
-
-    @Override
-    public String getSchool(String roomId) {
-        List<StudyRoomInfo> info = db.query("select school from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
-        if (info.size() > 0)
-            return info.get(0).getSchool();
         return null;
     }
 

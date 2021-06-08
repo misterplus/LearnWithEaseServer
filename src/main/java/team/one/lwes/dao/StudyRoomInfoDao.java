@@ -2,27 +2,25 @@ package team.one.lwes.dao;
 
 import team.one.lwes.bean.StudyRoomInfo;
 
+import java.util.List;
+
 public interface StudyRoomInfoDao {
 
     void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int contentStudy, int gender, String province, String city, String area, String school);
 
     void removeStudyRoomInfo(String roomId);
 
-    int getTimeStudy(String roomId);
+    List<String> getRoomIdByTimeStudy(int timeStudy);
 
-    int getTimeRest(String roomId);
+    List getRoomIdByTimeRest(int timeRest);
 
-    int getContentStudy(String roomId);
+    List getRoomIdByContentStudy(int contentStudy);
 
-    int getGender(String roomId);
+    List getRoomIdByGender(int gender);
 
-    String getProvince(String roomId);
+    List getRoomIdByPlace(String province, String city, String area);
 
-    String getCity(String roomId);
-
-    String getArea(String roomId);
-
-    String getSchool(String roomId);
+    List getRoomIdBySchool(String school);
 
     StudyRoomInfo getStudyRoomInfo(String roomId);
 }
