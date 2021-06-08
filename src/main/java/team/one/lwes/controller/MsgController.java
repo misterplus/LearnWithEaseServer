@@ -3,17 +3,13 @@ package team.one.lwes.controller;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import team.one.lwes.Config;
-import team.one.lwes.LearnWithEaseServerApplication;
 import team.one.lwes.annotation.CC;
-import team.one.lwes.bean.EnterRoomData;
 import team.one.lwes.bean.Response;
 import team.one.lwes.bean.RoomInfo;
 import team.one.lwes.bean.UserInfo;
@@ -50,11 +46,11 @@ public class MsgController {
         switch (eventType) {
             case 9: {
                 String accid = json.getStr("accid");
-                new Thread(() -> saveRoom(accid, roomId)).start();
-                break;
-            }
-            case 10: {
-                new Thread(() -> removeRoom(roomId)).start();
+                String event = json.getStr("event");
+                if (event.equals("IN"))
+                    new Thread(() -> saveRoom(accid, roomId)).start();
+                else
+                    new Thread(() -> removeRoom(roomId)).start();
                 break;
             }
             default:
