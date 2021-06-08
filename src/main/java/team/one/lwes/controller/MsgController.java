@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team.one.lwes.Config;
 import team.one.lwes.LearnWithEaseServerApplication;
 import team.one.lwes.annotation.CC;
+import team.one.lwes.bean.EnterRoomData;
 import team.one.lwes.bean.Response;
 import team.one.lwes.bean.RoomInfo;
 import team.one.lwes.bean.UserInfo;
@@ -67,9 +68,10 @@ public class MsgController {
         Response room = APIUtils.getRoomInfo(roomId);
         if (user.isSuccess() && room.isSuccess()) {
             UserInfo userInfo = JSONUtil.toBean(user.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
-            RoomInfo roominfo = room.getChatroom().getExt();
-            logger.info(roominfo.toString());
-            roomDao.saveStudyRoomInfo(roomId, roominfo.getTimeStudy(), roominfo.getTimeRest(), roominfo.getContentStudy(), user.getInfo().getInt("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
+            //RoomInfo roominfo = room.getChatroom().getExt();
+            EnterRoomData t = room.getChatroom();
+            logger.info(t.toString());
+            //roomDao.saveStudyRoomInfo(roomId, roominfo.getTimeStudy(), roominfo.getTimeRest(), roominfo.getContentStudy(), user.getInfo().getInt("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
         } else {
             saveRoom(accid, roomId);
         }
