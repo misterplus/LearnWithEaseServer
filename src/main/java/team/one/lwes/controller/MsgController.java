@@ -62,11 +62,14 @@ public class MsgController {
     }
 
     private void saveRoom(String accid, String roomId) {
+        Logger logger= LoggerFactory.getLogger(LearnWithEaseServerApplication.class);
         Response user = APIUtils.getUserInfo(accid);
         Response room = APIUtils.getRoomInfo(roomId);
         if (user.isSuccess() && room.isSuccess()) {
             UserInfo userInfo = JSONUtil.toBean(user.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
             RoomInfo roominfo = room.getChatroom().getExt();
+            logger.info(user.getUinfos().getJSONObject(0).getStr("ex"));
+            logger.info(String.valueOf(roominfo.getTimeRest()));
             roomDao.saveStudyRoomInfo(roomId, roominfo.getTimeStudy(), roominfo.getTimeRest(), roominfo.getContentStudy(), user.getInfo().getInt("gender"), userInfo.getProvince(), userInfo.getCity(), userInfo.getArea(), userInfo.getSchool());
         } else {
             saveRoom(accid, roomId);
