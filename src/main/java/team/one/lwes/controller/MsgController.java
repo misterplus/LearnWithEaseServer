@@ -36,8 +36,9 @@ public class MsgController {
         boolean b1 = !contentType.equals("application/json");
         boolean b2 = !checkSumCal.equals(checkSum);
         boolean b3 = !SecureUtil.md5(content).equals(md5);
-        logger.info(b1 + " " + b2 + " " + b3);
-        if (b1 || b2 || b3) {
+        boolean b4 = !appKey.equals(config.getAppKey());
+        logger.info(b1 + " " + b2 + " " + b3 + " " + b4);
+        if (b1 || b2 || b3 || b4) {
             return new Response(414);
         }
         JSONObject json = new JSONObject(content);
