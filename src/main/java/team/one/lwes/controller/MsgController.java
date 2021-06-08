@@ -2,12 +2,15 @@ package team.one.lwes.controller;
 
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import team.one.lwes.Config;
+import team.one.lwes.LearnWithEaseServerApplication;
 import team.one.lwes.annotation.CC;
 import team.one.lwes.bean.Response;
 
@@ -33,7 +36,9 @@ public class MsgController {
             return new Response(414);
         }
         JSONObject json = new JSONObject(content);
-        System.out.println(json.get("eventType"));
+        Logger logger= LoggerFactory.getLogger(LearnWithEaseServerApplication.class);
+        logger.info("debug:");
+        logger.info(json.getStr("eventType"));
         return new Response(200);
     }
 }
