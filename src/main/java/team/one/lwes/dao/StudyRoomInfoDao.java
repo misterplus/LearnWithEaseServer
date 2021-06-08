@@ -1,12 +1,12 @@
 package team.one.lwes.dao;
 
-import team.one.lwes.bean.ChatRoomInfo;
+import team.one.lwes.bean.StudyRoomInfo;
 
-public interface RoomInfoDao {
+public interface StudyRoomInfoDao {
 
-    void saveChatRoomInfo(String roomId, int timeStudy, int timeRest, int contentStudy, int gender, String province, String city, String area, String school);
+    void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int contentStudy, int gender, String province, String city, String area, String school);
 
-    void removeChatRoomInfo(String roomId);
+    void removeStudyRoomInfo(String roomId);
 
     int getTimeStudy(String roomId);
 
@@ -24,5 +24,5 @@ public interface RoomInfoDao {
 
     String getSchool(String roomId);
 
-    ChatRoomInfo getChatRoomInfo(String roomId);
+    StudyRoomInfo getStudyRoomInfo(String roomId);
 }

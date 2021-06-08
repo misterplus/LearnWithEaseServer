@@ -61,9 +61,7 @@ public class RoomController {
         enterRoomData.setToken(roomToken.getToken());
         enterRoomData.setUid(uid);
         //TODO: add room info to database for later fetching
-        new Thread(() -> {
-            saveToDB(accid, roomId, room);
-        }).start();
+        new Thread(() -> saveToDB(accid, roomId, room)).start();
 
         return chatroom;
     }

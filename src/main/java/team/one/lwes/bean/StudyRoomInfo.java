@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRoomInfo {
+public class StudyRoomInfo {
     private int timeStudy, timeRest, contentStudy, gender;
     private String roomId, province, city, area, school;
 }
