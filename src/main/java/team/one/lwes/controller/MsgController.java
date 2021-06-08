@@ -27,13 +27,19 @@ public class MsgController {
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
     public Response receiveMsg(HttpServletRequest request, @RequestBody String content) {
         Logger logger= LoggerFactory.getLogger(LearnWithEaseServerApplication.class);
-        logger.info("test start");
         String contentType = request.getContentType();
         String appKey = request.getHeader("AppKey");
         String md5 = request.getHeader("MD5");
         String curTime = request.getHeader("CurTime");
         String checkSum = request.getHeader("CheckSum");
         String checkSumCal = SecureUtil.sha1(config.getAppSecret() + md5 + curTime);
+        logger.info(appKey);
+        logger.info(md5);
+        logger.info(curTime);
+        logger.info(checkSum);
+        logger.info(checkSumCal);
+        logger.info(content);
+        logger.info(SecureUtil.md5(content));
         if (!contentType.equals("application/json") || !appKey.equals(config.getAppKey()) || !checkSumCal.equals(checkSum) || !SecureUtil.md5(content).equals(md5)) {
             return new Response(414);
         }
