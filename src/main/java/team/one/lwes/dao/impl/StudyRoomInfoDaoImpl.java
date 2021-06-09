@@ -57,7 +57,7 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
     }
 
     @Override
-    public List getRoomsByPlace(String province, String city, String area) {
+    public List<String> getRoomsByPlace(String province, String city, String area) {
         List<String> rooms = db.queryForList("select roomId from study_room where province = ? and city = ? and area = ?", String.class, province, city, area);
         if (rooms.size() > 0)
             return rooms;

@@ -1,5 +1,6 @@
 package team.one.lwes.controller;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import team.one.lwes.util.APIUtils;
 import team.one.lwes.util.UserUtils;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -37,15 +39,39 @@ public class RoomController {
     @Auth
     @RequestMapping(value = "/fetch", method = RequestMethod.GET)
     public Response fetch(@CurrentUser LoginInfo user) {
-        //TODO: get recommended rooms for current user
+        //get recommended rooms for current user
+        JSONObject recs = new JSONObject();
         Set<String> recIds = new HashSet<>();
         Response userResp = APIUtils.getUserInfo(user.getAccid());
         UserInfo userInfo = JSONUtil.toBean(userResp.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
-        if (!userInfo.getSchool().equals("")) {
+        Preference pref = userInfo.getPref();
+        if (!userInfo.getSchool().equals("") && pref.isSameSchool()) {
+            // add to response, add to set for deduplication
+            recs.set("school", new JSONArray(roomDao.getRoomsBySchool(userInfo.getSchool())));
             recIds.addAll(roomDao.getRoomsBySchool(userInfo.getSchool()));
         }
-        recIds.addAll(roomDao.getRoomsByContentStudy(userInfo.getPref().getContentStudy()));
-        return null;
+        //deduplicate
+        List<String> contentStudy = roomDao.getRoomsByContentStudy(userInfo.getPref().getContentStudy());
+        contentStudy.removeAll(recIds);
+        //add to response, add to set
+        recs.set("content", new JSONArray(contentStudy));
+        recIds.addAll(contentStudy);
+
+        if (pref.isSameCity()) {
+            List<String> sameCity = roomDao.getRoomsByPlace(userInfo.getProvince(), userInfo.getCity(), userInfo.getArea());
+            sameCity.removeAll(recIds);
+            recs.set("city", new JSONArray(sameCity));
+            recIds.addAll(sameCity);
+        }
+
+        if (pref.isSameGender()) {
+            List<String> sameGender = roomDao.getRoomsByGender(userResp.getUinfos().getJSONObject(0).getInt("gender"));
+            sameGender.removeAll(recIds);
+            recs.set("gender", new JSONArray(sameGender));
+            recIds.addAll(sameGender);
+        }
+
+        return new Response(200, recs);
     }
 
     @Auth
