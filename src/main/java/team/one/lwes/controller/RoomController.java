@@ -37,7 +37,7 @@ public class RoomController {
     }
 
     @Auth
-    @RequestMapping(value = "/fetch", method = RequestMethod.GET)
+    @RequestMapping(value = "/fetch", method = RequestMethod.POST)
     public Response fetch(@CurrentUser LoginInfo user) {
         //get recommended rooms for current user
         JSONObject recs = new JSONObject();
