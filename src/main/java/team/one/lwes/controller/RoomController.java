@@ -13,9 +13,7 @@ import team.one.lwes.dao.impl.StudyRoomInfoDaoImpl;
 import team.one.lwes.util.APIUtils;
 import team.one.lwes.util.UserUtils;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/room")
@@ -40,38 +38,23 @@ public class RoomController {
     @RequestMapping(value = "/fetch", method = RequestMethod.POST)
     public Response fetch(@CurrentUser LoginInfo user) {
         //get recommended rooms for current user
-        JSONObject recs = new JSONObject();
-        Set<String> recIds = new HashSet<>();
         Response userResp = APIUtils.getUserInfo(user.getAccid());
         UserInfo userInfo = JSONUtil.toBean(userResp.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
         Preference pref = userInfo.getPref();
-        if (!userInfo.getSchool().equals("") && pref.isSameSchool()) {
-            // add to response, add to set for deduplication
-            recs.set("school", new JSONArray(roomDao.getRoomsBySchool(userInfo.getSchool())));
-            recIds.addAll(roomDao.getRoomsBySchool(userInfo.getSchool()));
-        }
-        //deduplicate
-        List<String> contentStudy = roomDao.getRoomsByContentStudy(userInfo.getPref().getContentStudy());
-        contentStudy.removeAll(recIds);
-        //add to response, add to set
-        recs.set("content", new JSONArray(contentStudy));
-        recIds.addAll(contentStudy);
 
+        String school = !userInfo.getSchool().equals("") && pref.isSameSchool() ? userInfo.getSchool() : "%%";
+        int contentStudy = pref.getContentStudy();
+        String province, city, area;
         if (pref.isSameCity()) {
-            List<String> sameCity = roomDao.getRoomsByPlace(userInfo.getProvince(), userInfo.getCity(), userInfo.getArea());
-            sameCity.removeAll(recIds);
-            recs.set("city", new JSONArray(sameCity));
-            recIds.addAll(sameCity);
+            province = userInfo.getProvince();
+            city = userInfo.getCity();
+            area = userInfo.getArea();
         }
-
-        if (pref.isSameGender()) {
-            List<String> sameGender = roomDao.getRoomsByGender(userResp.getUinfos().getJSONObject(0).getInt("gender"));
-            sameGender.removeAll(recIds);
-            recs.set("gender", new JSONArray(sameGender));
-            recIds.addAll(sameGender);
-        }
-
-        return new Response(200, recs);
+        else
+            province = city = area = "%%";
+        String gender = pref.isSameGender() ? userResp.getUinfos().getJSONObject(0).getStr("gender") : "%%";
+        List<StudyRoomInfo> info = roomDao.fetchRecs(pref.getTimeStudy(), pref.getTimeRest(), contentStudy, gender, province, city, area, school);
+        return new Response(200, new JSONObject(new JSONArray(info)));
     }
 
     @Auth

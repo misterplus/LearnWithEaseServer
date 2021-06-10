@@ -27,4 +27,6 @@ public interface StudyRoomInfoDao {
     List<String> getRoomsBySchool(String school);
 
     StudyRoomInfo getStudyRoomInfo(String roomId);
+
+    List<StudyRoomInfo> fetchRecs(int timeStudy, int timeRest, int contentStudy, String gender, String province, String city, String area, String school);
 }
