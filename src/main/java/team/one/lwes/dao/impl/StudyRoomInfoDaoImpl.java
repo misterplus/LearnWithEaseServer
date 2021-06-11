@@ -103,7 +103,7 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
 
     @Override
     public List<StudyRoomInfo> fetchRecs(int timeStudy, int timeRest, int contentStudy, String gender, String province, String city, String area, String school) {
-        List<StudyRoomInfo> info = db.query("select * from study_room where timeStudy like ? or timeRest like ? or contentStudy like ? or province like ? or city like ? or area like ? or school like ?", new BeanPropertyRowMapper(StudyRoomInfo.class), timeStudy, timeRest, contentStudy, province, city, area, school);
+        List<StudyRoomInfo> info = db.query("select * from study_room where timeStudy like ? or timeRest like ? or contentStudy like ? or province like ? or city like ? or area like ? or school like ? order by rand() limit 8", new BeanPropertyRowMapper(StudyRoomInfo.class), timeStudy, timeRest, contentStudy, province, city, area, school);
         if (info.size() > 0)
             return info;
         return null;

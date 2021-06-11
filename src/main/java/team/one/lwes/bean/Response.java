@@ -18,7 +18,12 @@ public class Response {
     private EnterRoomData chatroom;
     //token field is for video room token
     private String desc, token;
-    private JSONArray uinfos;
+    private JSONArray uinfos, recs;
+
+    public Response(int code, JSONArray recs) {
+        this.code = code;
+        this.recs = recs;
+    }
 
     public Response(int code, String desc) {
         this.code = code;

@@ -36,12 +36,9 @@ public class RoomController {
 
     @Auth
     @RequestMapping(value = "/fetch", method = RequestMethod.POST)
-    public Response fetch(@CurrentUser LoginInfo user) {
+    public Response fetch(@CurrentUser LoginInfo user, @RequestBody UserInfo userInfo, @RequestParam String gender) {
         //get recommended rooms for current user
-        Response userResp = APIUtils.getUserInfo(user.getAccid());
-        UserInfo userInfo = JSONUtil.toBean(userResp.getUinfos().getJSONObject(0).getStr("ex"), UserInfo.class);
         Preference pref = userInfo.getPref();
-
         String school = !userInfo.getSchool().equals("") && pref.isSameSchool() ? userInfo.getSchool() : "%%";
         int contentStudy = pref.getContentStudy();
         String province, city, area;
@@ -52,9 +49,9 @@ public class RoomController {
         }
         else
             province = city = area = "%%";
-        String gender = pref.isSameGender() ? userResp.getUinfos().getJSONObject(0).getStr("gender") : "%%";
+        gender = pref.isSameGender() ? gender : "%%";
         List<StudyRoomInfo> info = roomDao.fetchRecs(pref.getTimeStudy(), pref.getTimeRest(), contentStudy, gender, province, city, area, school);
-        return new Response(200, new JSONObject(new JSONArray(info)));
+        return new Response(200, new JSONArray(info));
     }
 
     @Auth
