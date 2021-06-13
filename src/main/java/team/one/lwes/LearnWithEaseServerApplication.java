@@ -17,6 +17,7 @@ import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import team.one.lwes.dao.impl.StudyRoomInfoDaoImpl;
 import team.one.lwes.interceptor.AuthInterceptor;
 import team.one.lwes.resolver.CurrentUserResolver;
 
@@ -32,6 +33,8 @@ public class LearnWithEaseServerApplication implements WebMvcConfigurer {
     private CurrentUserResolver currentUserResolver;
     @Autowired
     private AuthInterceptor authInterceptor;
+    @Autowired
+    private StudyRoomInfoDaoImpl roomDao;
 
     public static void main(String[] args) {
         SpringApplication.run(LearnWithEaseServerApplication.class, args);
@@ -39,6 +42,9 @@ public class LearnWithEaseServerApplication implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        //TODO: rework this
+        //does this even work lmao
+        roomDao.clear();
         resolvers.add(currentUserResolver);
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
     }

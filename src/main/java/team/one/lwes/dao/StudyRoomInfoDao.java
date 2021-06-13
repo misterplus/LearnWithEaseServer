@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface StudyRoomInfoDao {
 
+    void clear();
+
     void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int contentStudy, int gender, String province, String city, String area, String school);
 
     void removeStudyRoomInfo(String roomId);

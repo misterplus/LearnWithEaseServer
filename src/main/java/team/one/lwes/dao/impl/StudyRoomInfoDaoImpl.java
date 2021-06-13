@@ -19,6 +19,11 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
     private JdbcTemplate db;
 
     @Override
+    public void clear() {
+        db.update("delete from study_room where roomId like '%%'");
+    }
+
+    @Override
     public void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int content_study, int gender, String province, String city, String area, String school) {
         db.update("insert into study_room(roomId, timeStudy, timeRest, contentStudy, gender, province, city, area, school) values(?,?,?,?,?,?,?,?,?)",
                 roomId, timeStudy, timeRest, content_study, gender, province, city, area, school);
