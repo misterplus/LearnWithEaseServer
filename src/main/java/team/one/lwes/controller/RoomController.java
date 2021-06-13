@@ -36,8 +36,10 @@ public class RoomController {
 
     @Auth
     @RequestMapping(value = "/fetch", method = RequestMethod.POST)
-    public Response fetch(@CurrentUser LoginInfo user, @RequestBody UserInfo userInfo, @RequestParam String gender) {
+    public Response fetch(@RequestBody User user) {
         //get recommended rooms for current user
+        UserInfo userInfo = user.getEx();
+        String gender = String.valueOf(user.getGender());
         Preference pref = userInfo.getPref();
         String school = !userInfo.getSchool().equals("") && pref.isSameSchool() ? userInfo.getSchool() : "%%";
         int contentStudy = pref.getContentStudy();
