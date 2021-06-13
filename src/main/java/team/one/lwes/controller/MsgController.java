@@ -50,7 +50,10 @@ public class MsgController {
                 if (event.equals("IN"))
                     new Thread(() -> saveRoom(accid, roomId)).start();
                 else
-                    new Thread(() -> removeRoom(roomId)).start();
+                    new Thread(() -> {
+                        removeRoom(roomId);
+                        APIUtils.closeRoom(roomId, accid);
+                    }).start();
                 break;
             }
             default:

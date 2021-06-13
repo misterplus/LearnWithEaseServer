@@ -82,4 +82,16 @@ public class APIUtils {
                 .execute();
         return JSONUtil.toBean(resp.body(), Response.class);
     }
+
+    public static Response closeRoom(@NotNull String roomid, @NotNull String operator) {
+        HttpResponse resp = PostUtils.getBasicPost("https://api.netease.im/nimserver/chatroom/toggleCloseStat.action")
+                .form(
+                        "roomid", roomid,
+                        "operator", operator,
+                        "valid", false
+                )
+                .timeout(5000)
+                .execute();
+        return JSONUtil.toBean(resp.body(), Response.class);
+    }
 }
