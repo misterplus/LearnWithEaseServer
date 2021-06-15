@@ -30,80 +30,8 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
     }
 
     @Override
-    public List<String> getRoomsByTimeStudy(int timeStudy) {
-        List<String> rooms = db.queryForList("select roomId from study_room where timeStudy = ?", String.class, timeStudy);
-        if (rooms.size() > 0)
-            return rooms;
-        return null;
-    }
-
-    @Override
-    public List<String> getRoomsByTimeRest(int timeRest) {
-        List<String> rooms = db.queryForList("select roomId from study_room where timeRest = ?", String.class, timeRest);
-        if (rooms.size() > 0)
-            return rooms;
-        return null;
-    }
-
-    @Override
-    public List<String> getRoomsByContentStudy(int contentStudy) {
-        List<String> rooms = db.queryForList("select roomId from study_room where contentStudy = ?", String.class, contentStudy);
-        if (rooms.size() > 0)
-            return rooms;
-        return null;
-    }
-
-    @Override
-    public List<String> getRoomsByGender(int gender) {
-        List<String> rooms = db.queryForList("select roomId from study_room where gender = ?", String.class, gender);
-        if (rooms.size() > 0)
-            return rooms;
-        return null;
-    }
-
-    @Override
-    public List<String> getRoomsByPlace(String province, String city, String area) {
-        List<String> rooms = db.queryForList("select roomId from study_room where province = ? and city = ? and area = ?", String.class, province, city, area);
-        if (rooms.size() > 0)
-            return rooms;
-        return null;
-    }
-
-    @Override
-    public List<String> getRoomsByPlace(String province, String city) {
-        List<String> rooms = db.queryForList("select roomId from study_room where province = ? and city = ?", String.class, province, city);
-        if (rooms.size() > 0)
-            return rooms;
-        return null;
-    }
-
-    @Override
-    public List<String> getRoomsByPlace(String province) {
-        List<String> rooms = db.queryForList("select roomId from study_room where province = ?", String.class, province);
-        if (rooms.size() > 0)
-            return rooms;
-        return null;
-    }
-
-    @Override
-    public List<String> getRoomsBySchool(String school) {
-        List<String> rooms = db.queryForList("select roomId from study_room where school = ?", String.class, school);
-        if (rooms.size() > 0)
-            return rooms;
-        return null;
-    }
-
-    @Override
     public void removeStudyRoomInfo(String roomId) {
         db.update("delete from study_room where roomId = ?", roomId);
-    }
-
-    @Override
-    public StudyRoomInfo getStudyRoomInfo(String roomId) {
-        List<StudyRoomInfo> info = db.query("select * from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
-        if (info.size() > 0)
-            return info.get(0);
-        return null;
     }
 
     @Override
@@ -112,6 +40,21 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
         if (info.size() > 0)
             return info;
         return null;
+    }
+
+    @Override
+    public void updateTimeStudy(String roomId, int timeStudy) {
+        db.update("update study_room set timeStudy = ? where roomId = ?", timeStudy, roomId);
+    }
+
+    @Override
+    public void updateTimeRest(String roomId, int timeRest) {
+        db.update("update study_room set timeRest = ? where roomId = ?", timeRest, roomId);
+    }
+
+    @Override
+    public void updateContentStudy(String roomId, int contentStudy) {
+        db.update("update study_room set contentStudy = ? where roomId = ?", contentStudy, roomId);
     }
 
 }
