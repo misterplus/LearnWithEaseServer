@@ -87,4 +87,40 @@ public class RoomController {
         enterRoomData.setUid(uid);
         return chatroom;
     }
+
+    @Auth
+    @RequestMapping(value = "/updateTimeStudy", method = RequestMethod.POST)
+    public Response updateTimeStudy(@CurrentUser LoginInfo user, @RequestParam String roomId, @RequestParam int timeStudy) {
+        StudyRoomInfo info = roomDao.getRoom(roomId);
+        if (info == null)
+            return new Response(404, "room not found");
+        if (!info.getCreator().equals(user.getAccid()))
+            return Response.authFailedResp();
+        roomDao.updateTimeStudy(roomId, timeStudy);
+        return new Response(200);
+    }
+
+    @Auth
+    @RequestMapping(value = "/updateTimeRest", method = RequestMethod.POST)
+    public Response updateTimeRest(@CurrentUser LoginInfo user, @RequestParam String roomId, @RequestParam int timeRest) {
+        StudyRoomInfo info = roomDao.getRoom(roomId);
+        if (info == null)
+            return new Response(404, "room not found");
+        if (!info.getCreator().equals(user.getAccid()))
+            return Response.authFailedResp();
+        roomDao.updateTimeRest(roomId, timeRest);
+        return new Response(200);
+    }
+
+    @Auth
+    @RequestMapping(value = "/updateContentStudy", method = RequestMethod.POST)
+    public Response updateContentStudy(@CurrentUser LoginInfo user, @RequestParam String roomId, @RequestParam int contentStudy) {
+        StudyRoomInfo info = roomDao.getRoom(roomId);
+        if (info == null)
+            return new Response(404, "room not found");
+        if (!info.getCreator().equals(user.getAccid()))
+            return Response.authFailedResp();
+        roomDao.updateContentStudy(roomId, contentStudy);
+        return new Response(200);
+    }
 }

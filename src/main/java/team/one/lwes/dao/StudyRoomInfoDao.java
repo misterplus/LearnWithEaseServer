@@ -8,7 +8,7 @@ public interface StudyRoomInfoDao {
 
     void clear();
 
-    void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int contentStudy, int gender, String province, String city, String area, String school);
+    void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int contentStudy, int gender, String province, String city, String area, String school, String creator);
 
     void removeStudyRoomInfo(String roomId);
 
@@ -19,4 +19,6 @@ public interface StudyRoomInfoDao {
     void updateTimeRest(String roomId, int timeRest);
 
     void updateContentStudy(String roomId, int contentStudy);
+
+    StudyRoomInfo getRoom(String roomId);
 }

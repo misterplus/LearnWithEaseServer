@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import team.one.lwes.LearnWithEaseServerApplication;
+import team.one.lwes.bean.LoginInfo;
 import team.one.lwes.bean.StudyRoomInfo;
 import team.one.lwes.dao.StudyRoomInfoDao;
 
@@ -24,8 +25,8 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
     }
 
     @Override
-    public void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int content_study, int gender, String province, String city, String area, String school) {
-        db.update("insert into study_room(roomId, timeStudy, timeRest, contentStudy, gender, province, city, area, school) values(?,?,?,?,?,?,?,?,?)",
+    public void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int content_study, int gender, String province, String city, String area, String school, String creator) {
+        db.update("insert into study_room(roomId, timeStudy, timeRest, contentStudy, gender, province, city, area, school, creator) values(?,?,?,?,?,?,?,?,?,?)",
                 roomId, timeStudy, timeRest, content_study, gender, province, city, area, school);
     }
 
@@ -55,6 +56,14 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
     @Override
     public void updateContentStudy(String roomId, int contentStudy) {
         db.update("update study_room set contentStudy = ? where roomId = ?", contentStudy, roomId);
+    }
+
+    @Override
+    public StudyRoomInfo getRoom(String roomId) {
+        List<StudyRoomInfo> info = db.query("select * from study_room where roomId = ?", new BeanPropertyRowMapper(StudyRoomInfo.class), roomId);
+        if (info.size() > 0)
+            return info.get(0);
+        return null;
     }
 
 }
