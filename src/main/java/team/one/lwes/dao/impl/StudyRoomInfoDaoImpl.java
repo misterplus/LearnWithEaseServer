@@ -27,7 +27,7 @@ public class StudyRoomInfoDaoImpl implements StudyRoomInfoDao {
     @Override
     public void saveStudyRoomInfo(String roomId, int timeStudy, int timeRest, int content_study, int gender, String province, String city, String area, String school, String creator) {
         db.update("insert into study_room(roomId, timeStudy, timeRest, contentStudy, gender, province, city, area, school, creator) values(?,?,?,?,?,?,?,?,?,?)",
-                roomId, timeStudy, timeRest, content_study, gender, province, city, area, school);
+                roomId, timeStudy, timeRest, content_study, gender, province, city, area, school, creator);
     }
 
     @Override
